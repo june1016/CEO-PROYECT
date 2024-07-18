@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@nextui-org/react": "^2.4.2",
+    "@react-stately/data": "^3.11.4",
     "apexcharts": "^3.45.1",
     "clsx": "^2.1.0",
     "formik": "^2.4.5",
