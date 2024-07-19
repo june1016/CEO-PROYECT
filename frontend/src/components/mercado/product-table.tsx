@@ -12,7 +12,7 @@ import {
 } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 import { Product } from "@/types/market";
-import { columns, products } from "./product-data";
+import { columns, products } from "../../data/mercado/product-data";
 
 export const ProductTable: React.FC = () => {
   const [isLoading, setIsLoading] = React.useState(true);

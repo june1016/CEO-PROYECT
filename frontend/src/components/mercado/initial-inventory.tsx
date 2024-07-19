@@ -13,7 +13,7 @@ import {
   CardBody,
 } from "@nextui-org/react";
 import { InventoryItem } from "@/types/market";
-import { initialInventoryData } from "./initial-inventory-data";
+import { initialInventoryData } from "../../data/mercado/initial-inventory-data";
 
 export const InitialInventory: React.FC = () => {
   const totalInventory = initialInventoryData.reduce(

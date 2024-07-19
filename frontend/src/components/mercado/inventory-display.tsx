@@ -14,7 +14,10 @@ import {
   CardBody,
 } from "@nextui-org/react";
 import { MarginData, IndicadorData } from "@/types/market";
-import { initialMargins, initialIndicadores } from "./inventory-data";
+import {
+  initialMargins,
+  initialIndicadores,
+} from "../../data/mercado/inventory-data";
 
 export const InventoryDisplay: React.FC = () => {
   const [margins, setMargins] = useState<MarginData[]>(initialMargins);
