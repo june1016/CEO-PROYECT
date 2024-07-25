@@ -56,7 +56,16 @@ export const SidebarWrapper = () => {
                 icon={<FinanceIcon />}
                 items={[
                   { name: "Estados Financieros", href: "/finanzas/estados" },
+                  {
+                    name: "Gestión de Cuentas",
+                    href: "/finanzas/gestion-cuentas",
+                  },
+                  {
+                    name: "Activos y Pasivos",
+                    href: "/finanzas/activos-pasivos",
+                  },
                   { name: "Créditos Bancarios", href: "/finanzas/creditos" },
+                  { name: "Flujo de Caja", href: "/finanzas/flujo-caja" },
                 ]}
                 title="Gestión Financiera"
               />
