@@ -1,10 +1,10 @@
 import { Input, Link, Navbar, NavbarContent } from "@nextui-org/react";
 import React from "react";
-import { FeedbackIcon } from "../icons/navbar/feedback-icon";
-import { SearchIcon } from "../icons/searchicon";
-import { BurguerButton } from "./burguer-button";
-import { NotificationsDropdown } from "./notifications-dropdown";
-import { UserDropdown } from "./user-dropdown";
+// import { FeedbackIcon } from "../icons/navbar/feedbackIcon";
+//import { SearchIcon } from "../icons/searchIcon";
+import { BurguerButton } from "./burgerButton";
+import { NotificationsDropdown } from "./notificationsDropdown";
+import { UserDropdown } from "./userDropdown";
 interface Props {
   children: React.ReactNode;
 }

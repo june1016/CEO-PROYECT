@@ -1,24 +1,24 @@
 import React from "react";
-import { Sidebar } from "./sidebar.styles";
-import { Avatar, Tooltip } from "@nextui-org/react";
-import { CompanyInfo } from "./companies-dropdown";
-import { HomeIcon } from "../icons/sidebar/home-icon";
-import { AccountsIcon } from "../icons/sidebar/accounts-icon";
-import { ProductsIcon } from "../icons/sidebar/products-icon";
-import { ReportsIcon } from "../icons/sidebar/reports-icon";
-import { CollapseItems } from "./collapse-items";
-import { SidebarItem } from "./sidebar-item";
-import { SidebarMenu } from "./sidebar-menu";
-import { useSidebarContext } from "../layout/layout-context";
+import { Sidebar } from "./sidebarStyles";
+// import { Avatar, Tooltip } from "@nextui-org/react";
+import { CompanyInfo } from "./companiesDropdown";
+import { HomeIcon } from "../icons/sidebar/homeIcon";
+//import { AccountsIcon } from "../icons/sidebar/accountsIcon";
+import { ProductsIcon } from "../icons/sidebar/productsIcon";
+import { ReportsIcon } from "../icons/sidebar/reportsIcon";
+import { CollapseItems } from "./collapseItems";
+import { SidebarItem } from "./sidebarItem";
+import { SidebarMenu } from "./sidebarMenu";
+import { useSidebarContext } from "../layout/layoutContext";
 import { usePathname } from "next/navigation";
 
 // Importa o crea nuevos iconos según sea necesario
-import { MarketIcon } from "../icons/sidebar/market-icon";
-import { FinanceIcon } from "../icons/sidebar/finance-icon";
-import { HRIcon } from "../icons/sidebar/hr-icon";
-import { SalesIcon } from "../icons/sidebar/sales-icon";
-import { BudgetIcon } from "../icons/sidebar/budget-icon";
-import { InventoryIcon } from "../icons/sidebar/inventory-icon";
+import { MarketIcon } from "../icons/sidebar/marketIcon";
+import { FinanceIcon } from "../icons/sidebar/financeIcon";
+import { HRIcon } from "../icons/sidebar/hrIcon";
+import { SalesIcon } from "../icons/sidebar/salesIcon";
+import { BudgetIcon } from "../icons/sidebar/budgetIcon";
+import { InventoryIcon } from "../icons/sidebar/inventoryIcon";
 
 export const SidebarWrapper = () => {
   const pathname = usePathname();
@@ -47,15 +47,18 @@ export const SidebarWrapper = () => {
             />
             <SidebarMenu title="Gestión Empresarial">
               <SidebarItem
-                isActive={pathname === "/mercado"}
+                isActive={pathname === "/market"}
                 title="Información de Mercado"
                 icon={<MarketIcon />}
-                href="/mercado"
+                href="/market"
               />
               <CollapseItems
                 icon={<FinanceIcon />}
                 items={[
-                  { name: "Estados Financieros", href: "/finanzas/estados" },
+                  {
+                    name: "Estados Financieros",
+                    href: "/financialManagement/financialStatements",
+                  },
                   {
                     name: "Gestión de Cuentas",
                     href: "/finanzas/gestion-cuentas",
