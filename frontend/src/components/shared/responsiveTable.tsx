@@ -1,4 +1,4 @@
-// frontend/src/components/finanzas/ResponsiveTable.tsx
+"use client";
 import React from "react";
 import {
   Table,

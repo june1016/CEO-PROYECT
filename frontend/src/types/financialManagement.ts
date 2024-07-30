@@ -1,5 +1,3 @@
-// frontend/src/types/finanzas.ts
-
 export type BalanceItem = {
   id: string;
   categoria: string;
@@ -7,7 +5,7 @@ export type BalanceItem = {
   valor: number;
 };
 
-export type EstadoResultadosItem = {
+export type IncomeStatementItem = {
   id: string;
   concepto: string;
   valor: number;

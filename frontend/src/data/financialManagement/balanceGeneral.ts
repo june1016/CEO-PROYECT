@@ -1,5 +1,3 @@
-// frontend/src/data/finanzas/balanceGeneral.ts
-
 import { BalanceItem } from "@/types/financialManagement";
 
 export const balanceData: BalanceItem[] = [

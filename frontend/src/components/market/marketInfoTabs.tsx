@@ -1,31 +1,44 @@
 "use client";
 
-import React, { useState } from "react";
-import { Tabs, Tab } from "@nextui-org/react";
+import React from "react";
 import { ProductTable } from "./productTable";
 import { InventoryDisplay } from "./inventoryDisplay";
 import { InitialInventory } from "./initialInventory";
+import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { ReusableTabs, TabItem } from "@/components/shared/reusableTabs";
 
 export const MarketInfoTabs: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState("productos");
+  const { selectedTab, handleTabChange } = useTabSelection("productos");
+
+  const tabItems: TabItem[] = [
+    {
+      key: "productos",
+      title: "Productos",
+      content: <ProductTable />,
+    },
+    {
+      key: "inventario",
+      title: "Indicadores objetivo",
+      content: <InventoryDisplay />,
+    },
+    {
+      key: "inventarioInicial",
+      title: "Inventario inicial",
+      content: <InitialInventory />,
+    },
+  ];
 
   return (
-    <div>
-      <Tabs
-        aria-label="Opciones"
-        selectedKey={selectedTab}
-        onSelectionChange={(key) => setSelectedTab(key as string)}
-      >
-        <Tab key="productos" title="Productos">
-          {selectedTab === "productos" && <ProductTable />}
-        </Tab>
-        <Tab key="inventario" title="indicadores objetivo">
-          {selectedTab === "inventario" && <InventoryDisplay />}
-        </Tab>
-        <Tab key="inventarioInicial" title="inventario inicial">
-          {selectedTab === "inventarioInicial" && <InitialInventory />}
-        </Tab>
-      </Tabs>
+    <div className="flex flex-col space-y-4">
+      <ReusableTabs
+        items={tabItems}
+        selectedTab={selectedTab}
+        onSelectionChange={handleTabChange}
+        ariaLabel="Opciones"
+      />
+      <div className="mt-4">
+        {tabItems.find((item) => item.key === selectedTab)?.content}
+      </div>
     </div>
   );
 };

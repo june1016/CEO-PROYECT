@@ -1,66 +1,78 @@
-// frontend/src/components/finanzas/EstadosFinancierosTabs.tsx
 "use client";
-import React from "react";
-import { Tabs, Tab, Input } from "@nextui-org/react";
+import React, { useMemo } from "react";
+import { Input } from "@nextui-org/react";
 import { SearchIcon } from "../../icons/General/searchIcon";
 import { BalanceIcon } from "../../icons/General/balanceIcon";
 import { ResultadosIcon } from "../../icons/General/resultsIcon";
 import BalanceGeneral from "./balanceSheet";
 import EstadoResultados from "./incomeStatement";
+import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { ReusableTabs, TabItem } from "@/components/shared/reusableTabs";
+import useFinancialStatementsTab from "@/components/hooks/financialManagement/financialStatements/useFinancialStatementsTab";
 
-export default function EstadosFinancieros() {
-  const [filterValue, setFilterValue] = React.useState("");
-  const [selectedTab, setSelectedTab] = React.useState("balance");
+const MemoizedBalanceGeneral = React.memo(BalanceGeneral);
+const MemoizedEstadoResultados = React.memo(EstadoResultados);
+
+const EstadosFinancieros: React.FC = () => {
+  const { selectedTab, handleTabChange } = useTabSelection("balance");
+  const { filterValue, handleFilterChange, clearFilter } =
+    useFinancialStatementsTab();
+
+  const tabItems: TabItem[] = useMemo(
+    () => [
+      {
+        key: "balance",
+        title: (
+          <div className="flex items-center space-x-2">
+            <BalanceIcon />
+            <span>Balance General</span>
+          </div>
+        ),
+        content: <MemoizedBalanceGeneral filterValue={filterValue} />,
+      },
+      {
+        key: "resultados",
+        title: (
+          <div className="flex items-center space-x-2">
+            <ResultadosIcon />
+            <span>Estado de Resultados</span>
+          </div>
+        ),
+        content: <MemoizedEstadoResultados filterValue={filterValue} />,
+      },
+    ],
+    [filterValue]
+  );
 
   return (
-    <div className="space-y-4">
+    <div className="flex flex-col space-y-4">
       <h1 className="text-2xl font-bold mb-4">Estados Financieros</h1>
-
       <div className="flex justify-between items-center">
-        <Tabs
-          aria-label="Estados Financieros"
-          selectedKey={selectedTab}
-          onSelectionChange={(key) => setSelectedTab(key as string)}
-        >
-          <Tab
-            key="balance"
-            title={
-              <div className="flex items-center space-x-2">
-                <BalanceIcon />
-                <span>Balance General</span>
-              </div>
-            }
+        <div className="flex-grow">
+          <ReusableTabs
+            items={tabItems}
+            selectedTab={selectedTab}
+            onSelectionChange={handleTabChange}
+            ariaLabel="Estados Financieros"
           />
-          <Tab
-            key="resultados"
-            title={
-              <div className="flex items-center space-x-2">
-                <ResultadosIcon />
-                <span>Estado de Resultados</span>
-              </div>
-            }
+        </div>
+        <div className="ml-4">
+          <Input
+            isClearable
+            className="w-full max-w-[250px]"
+            placeholder="Buscar..."
+            startContent={<SearchIcon />}
+            value={filterValue}
+            onClear={clearFilter}
+            onValueChange={handleFilterChange}
           />
-        </Tabs>
-
-        <Input
-          isClearable
-          className="w-full max-w-[250px]"
-          placeholder="Buscar..."
-          startContent={<SearchIcon />}
-          value={filterValue}
-          onClear={() => setFilterValue("")}
-          onValueChange={(value) => setFilterValue(value)}
-        />
+        </div>
       </div>
-
-      <div>
-        {selectedTab === "balance" && (
-          <BalanceGeneral filterValue={filterValue} />
-        )}
-        {selectedTab === "resultados" && (
-          <EstadoResultados filterValue={filterValue} />
-        )}
+      <div className="mt-4">
+        {tabItems.find((item) => item.key === selectedTab)?.content}
       </div>
     </div>
   );
-}
+};
+
+export default React.memo(EstadosFinancieros);

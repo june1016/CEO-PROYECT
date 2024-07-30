@@ -1,9 +1,7 @@
-"use client";
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
-// import { BalanceItem } from "@/types/financialManagement";
 import { balanceData } from "@/data/financialManagement/balanceGeneral";
-import { ResponsiveTable } from "@/components/shared/table/responsiveTable";
+import { ResponsiveTable } from "@/components/shared/responsiveTable";
 import { BalanceChart } from "./balanceChart";
 import { SummaryCard } from "./summaryCard";
 import { useFilteredData } from "@/components/hooks/financialManagement/financialStatements/useFilteredData";
@@ -16,11 +14,11 @@ const columns = [
   { name: "VALOR", uid: "valor" },
 ];
 
-export default function BalanceGeneral({
-  filterValue,
-}: {
+interface BalanceGeneralProps {
   filterValue: string;
-}) {
+}
+
+const BalanceGeneral: React.FC<BalanceGeneralProps> = ({ filterValue }) => {
   const filteredItems = useFilteredData(
     balanceData,
     filterValue,
@@ -65,4 +63,6 @@ export default function BalanceGeneral({
       </CardBody>
     </Card>
   );
-}
+};
+
+export default BalanceGeneral;

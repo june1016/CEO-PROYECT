@@ -1,4 +1,4 @@
-// frontend/src/components/finanzas/ResultsChart.tsx
+"use client";
 import React from "react";
 import {
   BarChart,
@@ -10,10 +10,10 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import { EstadoResultadosItem } from "@/types/financialManagement";
+import { IncomeStatementItem } from "@/types/financialManagement";
 
 interface ResultsChartProps {
-  data: EstadoResultadosItem[];
+  data: IncomeStatementItem[];
 }
 
 export const ResultsChart: React.FC<ResultsChartProps> = ({ data }) => {
