@@ -1,16 +1,13 @@
 "use client";
+import React from "react";
+import MarketInfoTabs from "@/components/market/marketInfoTabs";
 
-import { MarketInfoTabs } from "@/components/market/marketInfoTabs";
-
-export default function Home() {
+const MarketPage: React.FC = () => {
   return (
-    <main className="flex flex-col items-center justify-start min-h-screen p-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">
-        Información de Mercado y Objetivo
-      </h1>
-      <div className="w-full max-w-7xl">
-        <MarketInfoTabs />
-      </div>
-    </main>
+    <div className="p-4">
+      <MarketInfoTabs />
+    </div>
   );
-}
+};
+
+export default MarketPage;

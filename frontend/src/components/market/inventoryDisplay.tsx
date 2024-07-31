@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -12,17 +12,38 @@ import {
   Card,
   CardHeader,
   CardBody,
+  Chip,
 } from "@nextui-org/react";
 import { MarginData, IndicadorData } from "@/types/market";
 import {
   initialMargins,
   initialIndicadores,
 } from "../../data/market/inventoryData";
+import { PercentIcon } from "@/components/icons/General/percentIcon";
+import { TargetIcon } from "@/components/icons/General/targetIcon";
 
-export const InventoryDisplay: React.FC = () => {
+interface InventoryDisplayProps {
+  filterValue: string;
+}
+
+export const InventoryDisplay: React.FC<InventoryDisplayProps> = ({
+  filterValue,
+}) => {
   const [margins, setMargins] = useState<MarginData[]>(initialMargins);
   const [indicadores, setIndicadores] =
     useState<IndicadorData[]>(initialIndicadores);
+
+  const filteredMargins = useMemo(() => {
+    return margins.filter((item) =>
+      item.producto.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [margins, filterValue]);
+
+  const filteredIndicadores = useMemo(() => {
+    return indicadores.filter((item) =>
+      item.indicador.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [indicadores, filterValue]);
 
   const handleMarginChange = (index: number, value: string) => {
     const newMargins = [...margins];
@@ -39,17 +60,18 @@ export const InventoryDisplay: React.FC = () => {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
-          <h2 className="text-2xl font-bold">Márgenes de Utilidad</h2>
+        <CardHeader className="flex items-center">
+          <PercentIcon className="mr-2" />
+          <h2 className="text-xl font-semibold">Márgenes de Utilidad</h2>
         </CardHeader>
         <CardBody>
-          <Table aria-label="Tabla de Márgenes de Utilidad">
+          <Table aria-label="Tabla de Márgenes de Utilidad" shadow="none">
             <TableHeader>
-              <TableColumn>Producto</TableColumn>
-              <TableColumn>Margen de Utilidad</TableColumn>
+              <TableColumn>PRODUCTO</TableColumn>
+              <TableColumn>MARGEN DE UTILIDAD</TableColumn>
             </TableHeader>
             <TableBody>
-              {margins.map((item, index) => (
+              {filteredMargins.map((item, index) => (
                 <TableRow key={item.producto}>
                   <TableCell>{item.producto}</TableCell>
                   <TableCell>
@@ -59,6 +81,11 @@ export const InventoryDisplay: React.FC = () => {
                         handleMarginChange(index, e.target.value)
                       }
                       size="sm"
+                      endContent={
+                        <Chip size="sm" variant="flat" color="primary">
+                          %
+                        </Chip>
+                      }
                     />
                   </TableCell>
                 </TableRow>
@@ -69,17 +96,18 @@ export const InventoryDisplay: React.FC = () => {
       </Card>
 
       <Card>
-        <CardHeader>
-          <h2 className="text-2xl font-bold">Indicadores Objetivos</h2>
+        <CardHeader className="flex items-center">
+          <TargetIcon className="mr-2" />
+          <h2 className="text-xl font-semibold">Indicadores Objetivos</h2>
         </CardHeader>
         <CardBody>
-          <Table aria-label="Tabla de Indicadores Objetivos">
+          <Table aria-label="Tabla de Indicadores Objetivos" shadow="none">
             <TableHeader>
-              <TableColumn>Indicador</TableColumn>
-              <TableColumn>Valor</TableColumn>
+              <TableColumn>INDICADOR</TableColumn>
+              <TableColumn>VALOR</TableColumn>
             </TableHeader>
             <TableBody>
-              {indicadores.map((item, index) => (
+              {filteredIndicadores.map((item, index) => (
                 <TableRow key={item.indicador}>
                   <TableCell>{item.indicador}</TableCell>
                   <TableCell>
@@ -89,6 +117,11 @@ export const InventoryDisplay: React.FC = () => {
                         handleIndicadorChange(index, e.target.value)
                       }
                       size="sm"
+                      endContent={
+                        <Chip size="sm" variant="flat" color="secondary">
+                          Objetivo
+                        </Chip>
+                      }
                     />
                   </TableCell>
                 </TableRow>

@@ -1,5 +1,3 @@
-// frontend/src/data/finanzas/estadoResultados.ts
-
 import { IncomeStatementItem } from "@/types/financialManagement";
 
 export const incomeStatementData: IncomeStatementItem[] = [

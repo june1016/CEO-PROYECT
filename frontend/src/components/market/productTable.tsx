@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Table,
   TableHeader,
@@ -8,77 +8,56 @@ import {
   TableBody,
   TableRow,
   TableCell,
-  Spinner,
+  Card,
+  CardHeader,
+  CardBody,
+  Chip,
 } from "@nextui-org/react";
-import { useAsyncList } from "@react-stately/data";
-import { Product } from "@/types/market";
-import { columns, products } from "../../data/market/productData";
+import { Product, Column } from "@/types/market";
+import { ProductIcon } from "@/components/icons/General/productIcon";
+import { columns, products } from "@/data/market/productData";
 
-export const ProductTable: React.FC = () => {
-  const [isLoading, setIsLoading] = React.useState(true);
+interface ProductTableProps {
+  filterValue: string;
+}
 
-  const list = useAsyncList<Product>({
-    async load({ signal }) {
-      // Simulamos una carga asíncrona
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      setIsLoading(false);
-      return {
-        items: products,
-      };
-    },
-    async sort({ items, sortDescriptor }) {
-      return {
-        items: items.sort((a, b) => {
-          const column = sortDescriptor.column as keyof Product;
-          const first = a[column];
-          const second = b[column];
-          let cmp = 0;
-
-          if (typeof first === "string" && typeof second === "string") {
-            cmp = first.localeCompare(second);
-          } else if (typeof first === "number" && typeof second === "number") {
-            cmp = first - second;
-          }
-
-          if (sortDescriptor.direction === "descending") {
-            cmp *= -1;
-          }
-
-          return cmp;
-        }),
-      };
-    },
-  });
+export const ProductTable: React.FC<ProductTableProps> = ({ filterValue }) => {
+  const filteredProducts = useMemo(() => {
+    return products.filter((product) =>
+      product.name.toLowerCase().includes(filterValue.toLowerCase())
+    );
+  }, [filterValue]);
 
   return (
-    <Table
-      aria-label="Tabla de productos con ordenamiento del lado del cliente"
-      sortDescriptor={list.sortDescriptor}
-      onSortChange={list.sort}
-      classNames={{
-        table: "min-h-[400px]",
-      }}
-    >
-      <TableHeader>
-        {columns.map((column) => (
-          <TableColumn key={column.uid} allowsSorting>
-            {column.name}
-          </TableColumn>
-        ))}
-      </TableHeader>
-      <TableBody
-        items={list.items}
-        isLoading={isLoading}
-        loadingContent={<Spinner label="Cargando..." />}
-      >
-        {(item) => (
-          <TableRow key={item.id}>
-            {(columnKey) => (
-              <TableCell>{item[columnKey as keyof Product]}</TableCell>
-            )}
-          </TableRow>
-        )}
-      </TableBody>
-    </Table>
+    <Card>
+      <CardHeader className="flex justify-between items-center">
+        <div className="flex items-center">
+          <ProductIcon className="mr-2" />
+          <h2 className="text-xl font-semibold">Tabla de Productos</h2>
+        </div>
+      </CardHeader>
+      <CardBody>
+        <Table aria-label="Tabla de Productos" shadow="none">
+          <TableHeader>
+            {columns.map((column: Column) => (
+              <TableColumn key={column.uid}>{column.name}</TableColumn>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {filteredProducts.map((product: Product) => (
+              <TableRow key={product.id}>
+                <TableCell>{product.name}</TableCell>
+                <TableCell>{product.estimatedQuantity}</TableCell>
+                <TableCell>
+                  <Chip color="success" variant="flat">
+                    ${product.marketPrice.toLocaleString()}
+                  </Chip>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardBody>
+    </Card>
   );
 };
