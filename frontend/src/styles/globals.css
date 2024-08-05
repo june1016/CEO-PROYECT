@@ -1,0 +1,26 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Añade estas clases para las transiciones */
+.sidebar-transition {
+  transition: width 0.3s ease-in-out;
+}
+
+.sidebar-expanded {
+  width: 280px;
+}
+
+.sidebar-collapsed {
+  width: 80px;
+}
