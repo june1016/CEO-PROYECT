@@ -1,7 +1,11 @@
 import React from "react";
 import { Sidebar } from "./sidebarStyles";
 // import { Avatar, Tooltip } from "@nextui-org/react";
+<<<<<<< HEAD
 import { CompanyInfo } from "./companyLogo";
+=======
+import { CompanyInfo } from "./companiesDropdown";
+>>>>>>> dea8224fafe553c760f1e666622c57409ee05d55
 import { HomeIcon } from "../icons/sidebar/homeIcon";
 //import { AccountsIcon } from "../icons/sidebar/accountsIcon";
 import { ProductsIcon } from "../icons/sidebar/productsIcon";
