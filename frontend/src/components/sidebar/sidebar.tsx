@@ -1,11 +1,7 @@
 import React from "react";
 import { Sidebar } from "./sidebarStyles";
 // import { Avatar, Tooltip } from "@nextui-org/react";
-<<<<<<< HEAD
 import { CompanyInfo } from "./companyLogo";
-=======
-import { CompanyInfo } from "./companiesDropdown";
->>>>>>> dea8224fafe553c760f1e666622c57409ee05d55
 import { HomeIcon } from "../icons/sidebar/homeIcon";
 //import { AccountsIcon } from "../icons/sidebar/accountsIcon";
 import { ProductsIcon } from "../icons/sidebar/productsIcon";
@@ -64,12 +60,12 @@ export const SidebarWrapper = () => {
                     href: "/financialManagement/financialStatements",
                   },
                   {
-                    name: "Gestión de Cuentas",
-                    href: "/finanzas/gestion-cuentas",
+                    name: "Gestión de Activos Corrientes",
+                    href: "/financialManagement/currentAssetsManagement",
                   },
                   {
-                    name: "Activos y Pasivos",
-                    href: "/finanzas/activos-pasivos",
+                    name: "Cuentas por Cobrar y Pagar",
+                    href: "/financialManagement/accountsReceivablePayable",
                   },
                   { name: "Créditos Bancarios", href: "/finanzas/creditos" },
                   { name: "Flujo de Caja", href: "/finanzas/flujo-caja" },

@@ -58,7 +58,7 @@ const MarketInfoTabs: React.FC = () => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <h1 className="text-3xl font-bold mb-6">Información de Mercado</h1>
+      {/* <h1 className="text-3xl font-bold mb-6">Información de Mercado</h1> */}
       <div className="flex justify-between items-center">
         <div className="flex-grow">
           <ReusableTabs

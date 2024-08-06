@@ -9,29 +9,55 @@ import {
   TableCell,
   Card,
   CardBody,
+  SortDescriptor,
 } from "@nextui-org/react";
 
 interface ResponsiveTableProps {
   columns: { name: string; uid: string }[];
   items: any[];
   renderCell: (item: any, columnKey: React.Key) => React.ReactNode;
+  onSortChange?: (
+    column: string,
+    direction: "ascending" | "descending"
+  ) => void;
 }
 
 export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
   columns,
   items,
   renderCell,
+  onSortChange,
 }) => {
+  const [sortDescriptor, setSortDescriptor] = React.useState<SortDescriptor>({
+    column: undefined,
+    direction: "ascending",
+  });
+
+  const handleSortChange = (descriptor: SortDescriptor) => {
+    setSortDescriptor(descriptor);
+    if (onSortChange && descriptor.column) {
+      onSortChange(
+        descriptor.column.toString(),
+        descriptor.direction as "ascending" | "descending"
+      );
+    }
+  };
+
   return (
     <>
       {/* Tabla para pantallas más grandes */}
       <div className="hidden md:block">
-        <Table aria-label="Tabla de datos">
+        <Table
+          aria-label="Tabla de datos"
+          sortDescriptor={sortDescriptor}
+          onSortChange={handleSortChange}
+        >
           <TableHeader columns={columns}>
             {(column) => (
               <TableColumn
                 key={column.uid}
                 align={column.uid === "valor" ? "end" : "start"}
+                allowsSorting
               >
                 {column.name}
               </TableColumn>
