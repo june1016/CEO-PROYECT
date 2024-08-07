@@ -13,7 +13,7 @@ import {
 } from "@nextui-org/react";
 
 interface ResponsiveTableProps {
-  columns: { name: string; uid: string }[];
+  columns: { name: string; uid: string; sortable?: boolean }[];
   items: any[];
   renderCell: (item: any, columnKey: React.Key) => React.ReactNode;
   onSortChange?: (
@@ -57,7 +57,7 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
               <TableColumn
                 key={column.uid}
                 align={column.uid === "valor" ? "end" : "start"}
-                allowsSorting
+                allowsSorting={column.sortable !== false}
               >
                 {column.name}
               </TableColumn>
@@ -83,7 +83,7 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
               {columns.map((column) => (
                 <div
                   key={column.uid}
-                  className="flex justify-between items-center"
+                  className="flex justify-between items-center py-1"
                 >
                   <span className="font-bold">{column.name}</span>
                   <span>{renderCell(item, column.uid)}</span>

@@ -32,19 +32,15 @@ export type BankTransfer = {
   amount: number;
 };
 
-export type AccountsReceivableItem = {
-  id: string;
-  cliente: string;
-  monto: number;
-  fechaVencimiento: string;
-};
-
 export interface Account {
   id: string;
   clientName: string;
   amount: number;
   dueDate: string;
   status: "Pendiente" | "Vencido" | "Pagado";
+  daysOverdue: number;
+  paymentHistory?: PaymentRecord[];
+  notes?: string;
 }
 
 export interface AccountsDistribution {
@@ -58,4 +54,22 @@ export interface PaymentRecord {
   amount: number;
   date: string;
   type: "Pago" | "Cobro";
+  isPartialPayment?: boolean;
+}
+
+export interface Transaction {
+  id: string;
+  accountId: string;
+  amount: number;
+  date: string;
+  type: "Ingreso" | "Egreso";
+  description: string;
+}
+
+export interface FinancialSummary {
+  totalReceivable: number;
+  totalPayable: number;
+  cashFlow: number;
+  overdueReceivable: number;
+  overduePayable: number;
 }
