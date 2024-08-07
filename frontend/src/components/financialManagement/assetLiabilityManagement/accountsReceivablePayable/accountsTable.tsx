@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { Input, Pagination } from "@nextui-org/react";
 import { Account } from "@/types/financialManagement";
-import { useAccountsTable } from "@/components/hooks/financialManagement/accountsReceivablePayable/useAccountsTable";
-import { renderAccountCell } from "@/components/utils/financialManagement/accountsReceivablePayable/renderCells";
+import { useAccountsTable } from "@/components/hooks/financialManagement/assetLiabilityManagement/accountsReceivablePayable/useAccountsTable";
+import { renderAccountCell } from "@/components/utils/financialManagement/assetLiabilityManagement/accountsReceivablePayable/renderCells";
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
 
 interface AccountsTableProps {

@@ -3,8 +3,8 @@ import {
   accountsReceivable,
   accountsPayable,
   accountsDistribution,
-} from "@/data/financialManagement/accountsReceivablePayable";
-import { generateAgeingReport } from "@/components/utils/financialManagement/accountsReceivablePayable/reportGenerator";
+} from "@/data/financialManagement/assetLiabilityManagement/accountsReceivablePayable";
+import { generateAgeingReport } from "@/components/utils/financialManagement/assetLiabilityManagement/accountsReceivablePayable/reportGenerator";
 import { FinancialSummary } from "@/types/financialManagement";
 import { useTabSelection } from "@/components/hooks/useTabSelection";
 

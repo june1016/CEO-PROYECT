@@ -11,7 +11,7 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import {
   accountsReceivable,
   accountsPayable,
-} from "@/data/financialManagement/accountsReceivablePayable";
+} from "@/data/financialManagement/assetLiabilityManagement/accountsReceivablePayable";
 import { PaymentRecord } from "@/types/financialManagement";
 
 export const PaymentRecordForm: React.FC = () => {

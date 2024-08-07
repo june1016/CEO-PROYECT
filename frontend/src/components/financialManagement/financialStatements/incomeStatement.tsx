@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
-import { incomeStatementData } from "@/data/financialManagement/incomeStatement";
+import { incomeStatementData } from "@/data/financialManagement/financialStatements/incomeStatement";
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
 import { SummaryCard } from "./summaryCard";
 import { ResultsChart } from "./resultsChart";

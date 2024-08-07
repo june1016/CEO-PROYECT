@@ -1,15 +1,15 @@
-// frontend/src/app/(app)/financialManagement/currentAssets/page.tsx
+// // frontend/src/app/(app)/financialManagement/currentAssets/page.tsx
 
-"use client";
-import React from "react";
-import CashBankManagementTabs from "@/components/financialManagement/currentAssetsManagement/cashBankManagementTabs";
+// "use client";
+// import React from "react";
+// import CashBankManagementTabs from "@/components/financialManagement/assetLiabilityManagement/currentAssetsManagement/cashBankManagementTabs";
 
-const CurrentAssetsPage: React.FC = () => {
-  return (
-    <div className="p-4">
-      <CashBankManagementTabs />
-    </div>
-  );
-};
+// const CurrentAssetsPage: React.FC = () => {
+//   return (
+//     <div className="p-4">
+//       <CashBankManagementTabs />
+//     </div>
+//   );
+// };
 
-export default CurrentAssetsPage;
+// export default CurrentAssetsPage;

@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody } from "@nextui-org/react";
-import { balanceData } from "@/data/financialManagement/balanceGeneral";
+import { balanceData } from "@/data/financialManagement/financialStatements/balanceGeneral";
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
 import { BalanceChart } from "./balanceChart";
 import { SummaryCard } from "./summaryCard";

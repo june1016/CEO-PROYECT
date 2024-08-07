@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from "react";
-import { BalanceIcon } from "../../icons/General/balanceIcon";
+import { BalanceIcon } from "../../../icons/General/balanceIcon";
 import { CashBankTable } from "./cashBankTable";
 import { TransferForm } from "./transferForm";
 import { useTabSelection } from "@/components/hooks/useTabSelection";
@@ -8,7 +8,7 @@ import { ReusableTabs } from "@/components/shared/reusableTabs";
 import {
   cashBankBalances,
   cashBankTransactions,
-} from "@/data/financialManagement/cashBankManagement";
+} from "@/data/financialManagement/assetLiabilityManagement/cashBankManagement";
 
 const MemoizedCashBankTable = React.memo(CashBankTable);
 const MemoizedTransferForm = React.memo(TransferForm);

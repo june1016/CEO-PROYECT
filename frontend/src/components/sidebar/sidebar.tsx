@@ -60,15 +60,21 @@ export const SidebarWrapper = () => {
                     href: "/financialManagement/financialStatements",
                   },
                   {
-                    name: "Gestión de Activos Corrientes",
-                    href: "/financialManagement/currentAssetsManagement",
+                    name: "Gestión de Activos y Pasivos",
+                    href: "/financialManagement/assetLiabilityManagement",
                   },
                   {
-                    name: "Cuentas por Cobrar y Pagar",
-                    href: "/financialManagement/accountsReceivablePayable",
+                    name: "Sistema de Créditos Bancarios",
+                    href: "/financialManagement/bankCredits",
                   },
-                  { name: "Créditos Bancarios", href: "/finanzas/creditos" },
-                  { name: "Flujo de Caja", href: "/finanzas/flujo-caja" },
+                  {
+                    name: "Flujo de Caja y Proyecciones",
+                    href: "/financialManagement/cashFlow",
+                  },
+                  {
+                    name: "Presupuestos y Análisis Financiero",
+                    href: "/financialManagement/budgetAnalysis",
+                  },
                 ]}
                 title="Gestión Financiera"
               />
