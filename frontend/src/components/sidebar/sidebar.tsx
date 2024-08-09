@@ -65,7 +65,7 @@ export const SidebarWrapper = () => {
                   },
                   {
                     name: "Sistema de Créditos Bancarios",
-                    href: "/financialManagement/bankCredits",
+                    href: "/financialManagement/BankCreditSystem",
                   },
                   {
                     name: "Flujo de Caja y Proyecciones",

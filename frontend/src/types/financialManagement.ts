@@ -73,3 +73,17 @@ export interface FinancialSummary {
   overdueReceivable: number;
   overduePayable: number;
 }
+
+export interface LoanData {
+  amount: number;
+  interestRate: number;
+  term: number;
+}
+
+export interface LoanProjection {
+  month: number;
+  payment: number;
+  principal: number;
+  interest: number;
+  balance: number;
+}
