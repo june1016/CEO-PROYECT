@@ -87,3 +87,22 @@ export interface LoanProjection {
   interest: number;
   balance: number;
 }
+
+export interface ActiveLoan {
+  id: string;
+  amount: number;
+  interestRate: number;
+  dueDate: string;
+  status: string;
+}
+
+export interface InterestRate {
+  date: string;
+  rate: number;
+}
+
+export interface PaymentSchedule {
+  loanId: string;
+  amount: number;
+  date: string;
+}

@@ -11,7 +11,7 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import { IncomeStatementItem } from "@/types/financialManagement";
-import { useResultsChartData } from "@/components/hooks/financialManagement/financialStatements/useResultsChartData";
+import { useResultsChartData } from "@/hooks/financialManagement/financialStatements/useResultsChartData";
 
 interface ResultsChartProps {
   data: IncomeStatementItem[];

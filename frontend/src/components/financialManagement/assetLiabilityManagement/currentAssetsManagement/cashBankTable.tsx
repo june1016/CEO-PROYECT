@@ -15,9 +15,9 @@ import {
   CashBankBalance,
 } from "@/types/financialManagement";
 import { CashBankChart } from "./cashBankChart";
-import { useCashBankTable } from "@/components/hooks/financialManagement/assetLiabilityManagement/currentAssetsManagement/useCashBankTable";
+import { useCashBankTable } from "@/hooks/financialManagement/assetLiabilityManagement/currentAssetsManagement/useCashBankTable";
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
-import { renderCashBankCell } from "@/components/utils/financialManagement/assetLiabilityManagement/currentAssetsManagement/renderCells";
+import { renderCashBankCell } from "@/utils/financialManagement/assetLiabilityManagement/currentAssetsManagement/renderCells";
 
 interface CashBankTableProps {
   transactions: CashBankTransaction[];

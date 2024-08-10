@@ -6,9 +6,9 @@ import { BalanceIcon } from "../../icons/General/balanceIcon";
 import { ResultadosIcon } from "../../icons/General/resultsIcon";
 import BalanceGeneral from "./balanceSheet";
 import EstadoResultados from "./incomeStatement";
-import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { useTabSelection } from "@/hooks/useTabSelection";
 import { ReusableTabs, TabItem } from "@/components/shared/reusableTabs";
-import useFinancialStatementsTab from "@/components/hooks/financialManagement/financialStatements/useFinancialStatementsTab";
+import useFinancialStatementsTab from "@/hooks/financialManagement/financialStatements/useFinancialStatementsTab";
 
 const MemoizedBalanceGeneral = React.memo(BalanceGeneral);
 const MemoizedEstadoResultados = React.memo(EstadoResultados);

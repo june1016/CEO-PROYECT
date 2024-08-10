@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
 import LoanApplicationPanel from "@/components/financialManagement/bankCreditSystem/loanApplication/LoanApplicationPanel";
-
+import PaymentInterestManagementPanel from "@/components/financialManagement/bankCreditSystem/paymentInterestManagement/PaymentInterestManagementPanel";
 const bankCreditPanel: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState("loanApplication");
 
@@ -22,7 +22,9 @@ const bankCreditPanel: React.FC = () => {
         </Tab>
         <Tab key="accounts" title="Gestión de pagos y tasas de interés">
           <Card>
-            <CardBody>{/* < /> */}</CardBody>
+            <CardBody>
+              <PaymentInterestManagementPanel />
+            </CardBody>
           </Card>
         </Tab>
       </Tabs>

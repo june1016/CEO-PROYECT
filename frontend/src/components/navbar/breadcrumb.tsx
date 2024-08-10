@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "@nextui-org/react";
-import { useBreadcrumbs } from "@/components/hooks/useBreadcrumbs";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 export const Breadcrumb = () => {
   const breadcrumbs = useBreadcrumbs();

@@ -1,5 +1,5 @@
 import { usePathname } from "next/navigation";
-import { routeConfig, RouteKey } from "../../config/routeConfig";
+import { routeConfig, RouteKey } from "../config/routeConfig";
 
 export const useBreadcrumbs = () => {
   const pathname = usePathname();

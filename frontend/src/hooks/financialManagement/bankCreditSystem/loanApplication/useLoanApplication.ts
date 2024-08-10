@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
-import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { useTabSelection } from "@/hooks/useTabSelection";
 import { LoanData, LoanProjection } from "@/types/financialManagement";
-import { calculateLoanPayments } from "@/components/utils/financialManagement/bankCreditSystem/loanApplication/loanCalculations";
+import { calculateLoanPayments } from "@/utils/financialManagement/bankCreditSystem/loanApplication/loanCalculations";
 
 const useLoanApplication = () => {
   const { selectedTab, handleTabChange } = useTabSelection("application");

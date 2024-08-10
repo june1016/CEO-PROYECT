@@ -4,9 +4,9 @@ import { balanceData } from "@/data/financialManagement/financialStatements/bala
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
 import { BalanceChart } from "./balanceChart";
 import { SummaryCard } from "./summaryCard";
-import { useFilteredData } from "@/components/hooks/financialManagement/financialStatements/useFilteredData";
-import { useBalanceTotals } from "@/components/hooks/financialManagement/financialStatements/useBalanceTotals";
-import { renderBalanceCell } from "@/components/utils/financialManagement/financialStatements/renderCells";
+import { useFilteredData } from "@/hooks/financialManagement/financialStatements/useFilteredData";
+import { useBalanceTotals } from "@/hooks/financialManagement/financialStatements/useBalanceTotals";
+import { renderBalanceCell } from "@/utils/financialManagement/financialStatements/renderCells";
 
 const columns = [
   { name: "CATEGORÍA", uid: "categoria" },

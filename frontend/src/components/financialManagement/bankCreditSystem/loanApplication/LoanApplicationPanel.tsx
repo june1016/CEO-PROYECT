@@ -6,7 +6,7 @@ import { ReusableTabs, TabItem } from "@/components/shared/reusableTabs";
 import LoanApplicationForm from "./LoanApplicationForm";
 import LoanCalculator from "./LoanCalculator";
 import LoanProjectionChart from "./LoanProjectionChart";
-import useLoanApplication from "@/components/hooks/financialManagement/bankCreditSystem/loanApplication/useLoanApplication";
+import useLoanApplication from "@/hooks/financialManagement/bankCreditSystem/loanApplication/useLoanApplication";
 
 const MemoizedLoanApplicationForm = React.memo(LoanApplicationForm);
 const MemoizedLoanCalculator = React.memo(LoanCalculator);

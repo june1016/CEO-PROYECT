@@ -1,8 +1,8 @@
 import React from "react";
 import { Chip } from "@nextui-org/react";
-import { MoneyIcon } from "../../../icons/General/moneyIcon";
-import { DebtIcon } from "../../../icons/General/debtIcon";
-import { EquityIcon } from "../../../icons/General/equityIcon";
+import { MoneyIcon } from "../../../components/icons/General/moneyIcon";
+import { DebtIcon } from "../../../components/icons/General/debtIcon";
+import { EquityIcon } from "../../../components/icons/General/equityIcon";
 import { BalanceItem } from "@/types/financialManagement";
 import { IncomeStatementItem } from "@/types/financialManagement";
 import { IncomeIcon } from "@/components/icons/General/incomeIcon";

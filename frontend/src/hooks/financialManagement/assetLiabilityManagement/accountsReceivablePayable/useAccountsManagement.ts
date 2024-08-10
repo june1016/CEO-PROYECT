@@ -4,9 +4,9 @@ import {
   accountsPayable,
   accountsDistribution,
 } from "@/data/financialManagement/assetLiabilityManagement/accountsReceivablePayable";
-import { generateAgeingReport } from "@/components/utils/financialManagement/assetLiabilityManagement/accountsReceivablePayable/reportGenerator";
+import { generateAgeingReport } from "@/utils/financialManagement/assetLiabilityManagement/accountsReceivablePayable/reportGenerator";
 import { FinancialSummary } from "@/types/financialManagement";
-import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { useTabSelection } from "@/hooks/useTabSelection";
 
 const useAccountsManagement = () => {
   const { selectedTab, handleTabChange } = useTabSelection("receivable");

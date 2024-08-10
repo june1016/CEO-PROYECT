@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "recharts";
 import { BalanceItem } from "@/types/financialManagement";
-import { useBalanceChartData } from "@/components/hooks/financialManagement/financialStatements/useBalanceChartData";
+import { useBalanceChartData } from "@/hooks/financialManagement/financialStatements/useBalanceChartData";
 
 interface BalanceChartProps {
   data: BalanceItem[];

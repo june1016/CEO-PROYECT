@@ -4,9 +4,9 @@ import { incomeStatementData } from "@/data/financialManagement/financialStateme
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
 import { SummaryCard } from "./summaryCard";
 import { ResultsChart } from "./resultsChart";
-import { useFilteredData } from "@/components/hooks/financialManagement/financialStatements/useFilteredData";
-import { useIncomeStatementCalculations } from "@/components/hooks/financialManagement/financialStatements/useIncomeStatementCalculations";
-import { renderIncomeStatementCell } from "@/components/utils/financialManagement/financialStatements/renderCells";
+import { useFilteredData } from "@/hooks/financialManagement/financialStatements/useFilteredData";
+import { useIncomeStatementCalculations } from "@/hooks/financialManagement/financialStatements/useIncomeStatementCalculations";
+import { renderIncomeStatementCell } from "@/utils/financialManagement/financialStatements/renderCells";
 
 const columns = [
   { name: "CONCEPTO", uid: "concepto" },

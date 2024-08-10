@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 import { BalanceIcon } from "../../../icons/General/balanceIcon";
 import { CashBankTable } from "./cashBankTable";
 import { TransferForm } from "./transferForm";
-import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { useTabSelection } from "@/hooks/useTabSelection";
 import { ReusableTabs } from "@/components/shared/reusableTabs";
 import {
   cashBankBalances,

@@ -5,7 +5,7 @@ import { ReusableTabs, TabItem } from "@/components/shared/reusableTabs";
 import { AccountsTable } from "./accountsTable";
 import { AccountsDistributionChart } from "./AccountsDistributionChart";
 import { PaymentRecordForm } from "./PaymentRecordForm";
-import useAccountsManagement from "@/components/hooks/financialManagement/assetLiabilityManagement/accountsReceivablePayable/useAccountsManagement";
+import useAccountsManagement from "@/hooks/financialManagement/assetLiabilityManagement/accountsReceivablePayable/useAccountsManagement";
 
 const MemoizedAccountsTable = React.memo(AccountsTable);
 const MemoizedAccountsDistributionChart = React.memo(AccountsDistributionChart);

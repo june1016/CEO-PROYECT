@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Input, Button, Card, CardBody } from "@nextui-org/react";
 import { NumericFormat } from "react-number-format";
 import { LoanData } from "@/types/financialManagement";
-import { calculateLoanPayments } from "@/components/utils/financialManagement/bankCreditSystem/loanApplication/loanCalculations";
+import { calculateLoanPayments } from "@/utils/financialManagement/bankCreditSystem/loanApplication/loanCalculations";
 
 interface LoanCalculatorProps {
   onCalculate: (loanData: LoanData) => void;

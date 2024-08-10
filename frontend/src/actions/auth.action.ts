@@ -1,4 +1,6 @@
 "use server";
+// Este archivo contiene funciones para manejar cookies de autenticación,
+// incluyendo la creación y eliminación de la cookie de autenticación del usuario.
 
 import { cookies } from "next/headers";
 

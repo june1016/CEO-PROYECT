@@ -8,9 +8,9 @@ import { InitialInventoryIcon } from "../icons/General/initialInventoryIcon";
 import { ProductTable } from "./productTable";
 import { InventoryDisplay } from "./inventoryDisplay";
 import { InitialInventory } from "./initialInventory";
-import { useTabSelection } from "@/components/hooks/useTabSelection";
+import { useTabSelection } from "@/hooks/useTabSelection";
 import { ReusableTabs, TabItem } from "@/components/shared/reusableTabs";
-import useMarketTab from "@/components/hooks/market/useMarketTab";
+import useMarketTab from "@/hooks/market/useMarketTab";
 
 const MemoizedProductTable = React.memo(ProductTable);
 const MemoizedInventoryDisplay = React.memo(InventoryDisplay);
