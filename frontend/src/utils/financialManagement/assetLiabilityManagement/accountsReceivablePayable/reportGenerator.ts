@@ -5,10 +5,10 @@ import "jspdf-autotable";
 export const generateAgeingReport = (
   accountsReceivable: Account[],
   accountsPayable: Account[]
-) => {
+): void => {
   const doc = new jsPDF();
 
-  const generateTable = (accounts: Account[], title: string) => {
+  const generateTable = (accounts: Account[], title: string): void => {
     doc.text(title, 14, 15);
     (doc as any).autoTable({
       startY: 20,
@@ -41,7 +41,7 @@ export const generateAgeingReport = (
   doc.save("reporte_antiguedad.pdf");
 };
 
-const calculateDaysOverdue = (dueDate: string) => {
+const calculateDaysOverdue = (dueDate: string): number => {
   const today = new Date();
   const due = new Date(dueDate);
   const diffTime = Math.abs(today.getTime() - due.getTime());

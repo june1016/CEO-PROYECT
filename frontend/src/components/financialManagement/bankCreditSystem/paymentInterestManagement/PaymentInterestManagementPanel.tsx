@@ -1,5 +1,3 @@
-// frontend/src/components/financialManagement/bankCreditSystem/paymentInterestManagement/PaymentInterestManagementPanel.tsx
-
 "use client";
 import React, { useMemo } from "react";
 import { Button } from "@nextui-org/react";

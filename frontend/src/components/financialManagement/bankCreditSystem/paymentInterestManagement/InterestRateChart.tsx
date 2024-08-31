@@ -1,5 +1,3 @@
-// frontend/src/components/financialManagement/bankCreditSystem/paymentInterestManagement/InterestRateChart.tsx
-
 import React from "react";
 import {
   LineChart,

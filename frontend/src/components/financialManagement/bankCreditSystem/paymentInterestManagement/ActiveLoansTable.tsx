@@ -1,5 +1,3 @@
-// frontend/src/components/financialManagement/bankCreditSystem/paymentInterestManagement/ActiveLoansTable.tsx
-
 import React from "react";
 import { ResponsiveTable } from "@/components/shared/responsiveTable";
 import { ActiveLoan } from "@/types/financialManagement";
