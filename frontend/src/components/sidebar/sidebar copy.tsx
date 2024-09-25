@@ -1,153 +1,173 @@
-// import React, { useState, useEffect } from "react";
+// import React, { useState, useEffect, useCallback } from "react";
 // import { Sidebar } from "./sidebarStyles";
-// import { CompanyInfo } from "./companiesDropdown";
+// import { CompanyInfo } from "./companyLogo";
 // import { HomeIcon } from "../icons/sidebar/homeIcon";
-// import { ProductsIcon } from "../icons/sidebar/productsIcon";
-// import { ReportsIcon } from "../icons/sidebar/reportsIcon";
 // import { CollapseItems } from "./collapseItems";
 // import { SidebarItem } from "./sidebarItem";
 // import { SidebarMenu } from "./sidebarMenu";
 // import { useSidebarContext } from "../layout/layoutContext";
 // import { usePathname } from "next/navigation";
+// import { motion, AnimatePresence } from "framer-motion";
+
+// // Import other necessary icons
 // import { MarketIcon } from "../icons/sidebar/marketIcon";
+// import { ObjectivesIcon } from "../icons/sidebar/objectivesIcon";
 // import { FinanceIcon } from "../icons/sidebar/financeIcon";
 // import { HRIcon } from "../icons/sidebar/hrIcon";
+// import { ProductionIcon } from "../icons/sidebar/productionIcon";
+// import { CostIcon } from "../icons/sidebar/costIcon";
 // import { SalesIcon } from "../icons/sidebar/salesIcon";
-// import { BudgetIcon } from "../icons/sidebar/budgetIcon";
-// import { InventoryIcon } from "../icons/sidebar/inventoryIcon";
+// import { ReportsIcon } from "../icons/sidebar/reportsIcon";
 
 // export const SidebarWrapper = () => {
 //   const pathname = usePathname();
 //   const { collapsed, setCollapsed } = useSidebarContext();
 //   const [isHovered, setIsHovered] = useState(false);
 
+//   const handleMouseEnter = useCallback(() => {
+//     setIsHovered(true);
+//     setCollapsed(false);
+//   }, [setCollapsed]);
+
+//   const handleMouseLeave = useCallback(() => {
+//     setIsHovered(false);
+//     setCollapsed(true);
+//   }, [setCollapsed]);
+
 //   useEffect(() => {
 //     const handleResize = () => {
 //       if (window.innerWidth < 768) {
-//         setCollapsed();
+//         setCollapsed(true);
 //       }
 //     };
+
 //     window.addEventListener("resize", handleResize);
 //     return () => window.removeEventListener("resize", handleResize);
 //   }, [setCollapsed]);
 
-//   const handleMouseEnter = () => {
-//     setIsHovered(true);
+//   const sidebarVariants = {
+//     expanded: { width: "280px" },
+//     collapsed: { width: "88px" },
 //   };
-
-//   const handleMouseLeave = () => {
-//     setIsHovered(false);
-//   };
-
-//   const isSidebarExpanded = !collapsed || isHovered;
 
 //   return (
-//     <aside
+//     <motion.aside
 //       className="h-screen z-[20] sticky top-0"
+//       initial={collapsed ? "collapsed" : "expanded"}
+//       animate={collapsed && !isHovered ? "collapsed" : "expanded"}
+//       variants={sidebarVariants}
+//       transition={{ type: "spring", stiffness: 400, damping: 30 }}
 //       onMouseEnter={handleMouseEnter}
 //       onMouseLeave={handleMouseLeave}
 //     >
-//       {collapsed && !isHovered && (
-//         <div className={Sidebar.Overlay()} onClick={setCollapsed} />
-//       )}
 //       <div
-//         className={Sidebar({
-//           collapsed: !isSidebarExpanded,
-//         })}
+//         className={`${Sidebar({
+//           collapsed: collapsed && !isHovered,
+//         })} bg-background border-r border-divider h-full flex flex-col overflow-hidden`}
 //       >
 //         <div className={Sidebar.Header()}>
-//           <CompanyInfo />
+//           <CompanyInfo collapsed={collapsed && !isHovered} />
 //         </div>
-//         <div className="flex flex-col justify-between h-full">
-//           <div className={Sidebar.Body()}>
-//             <SidebarItem
-//               title="Panel de Control"
-//               icon={<HomeIcon />}
-//               isActive={pathname === "/"}
-//               href="/"
-//             />
-//             <SidebarMenu title="Gestión Empresarial">
+//         <div className="flex flex-col justify-between h-full overflow-y-auto custom-scrollbar">
+//           <AnimatePresence>
+//             <motion.div
+//               className={Sidebar.Body()}
+//               initial={{ opacity: 0 }}
+//               animate={{ opacity: 1 }}
+//               exit={{ opacity: 0 }}
+//               transition={{ duration: 0.2 }}
+//             >
 //               <SidebarItem
-//                 isActive={pathname === "/market"}
-//                 title="Información de Mercado"
-//                 icon={<MarketIcon />}
-//                 href="/market"
+//                 title="Panel de Control"
+//                 icon={<HomeIcon />}
+//                 isActive={pathname === "/"}
+//                 href="/"
+//                 collapsed={collapsed && !isHovered}
 //               />
+//               {/* Fase 3: Gestión de Empresa */}
+//               <SidebarMenu
+//                 title="Gestión de Empresa"
+//                 collapsed={collapsed && !isHovered}
+//               >
+//                 <SidebarItem
+//                   isActive={pathname === "/market"}
+//                   title="Información de Mercado"
+//                   icon={<MarketIcon />}
+//                   href="/market"
+//                   collapsed={collapsed && !isHovered}
+//                 />
+//                 <SidebarItem
+//                   isActive={pathname === "/companyObjectives"}
+//                   title="Objetivos Empresariales"
+//                   icon={<ObjectivesIcon />}
+//                   href="/companyObjectives"
+//                   collapsed={collapsed && !isHovered}
+//                 />
+//               </SidebarMenu>
+
+//               {/* Fase 4: Gestión Financiera */}
 //               <CollapseItems
 //                 icon={<FinanceIcon />}
+//                 title="Gestión Financiera"
 //                 items={[
 //                   {
 //                     name: "Estados Financieros",
 //                     href: "/financialManagement/financialStatements",
 //                   },
 //                   {
-//                     name: "Gestión de Cuentas",
-//                     href: "/finanzas/gestion-cuentas",
+//                     name: "Gestión de Activos y Pasivos",
+//                     href: "/financialManagement/assetLiabilityManagement",
 //                   },
 //                   {
-//                     name: "Activos y Pasivos",
-//                     href: "/finanzas/activos-pasivos",
+//                     name: "Sistema de Créditos Bancarios",
+//                     href: "/financialManagement/BankCreditSystem",
 //                   },
-//                   { name: "Créditos Bancarios", href: "/finanzas/creditos" },
-//                   { name: "Flujo de Caja", href: "/finanzas/flujo-caja" },
+//                   {
+//                     name: "Flujo de Caja y Proyecciones",
+//                     href: "/financialManagement/cashFlowProjections",
+//                   },
+//                   {
+//                     name: "Presupuestos y Análisis Financiero",
+//                     href: "/financialManagement/budgetAnalysis",
+//                   },
 //                 ]}
-//                 title="Gestión Financiera"
+//                 collapsed={collapsed && !isHovered}
 //               />
-//               <SidebarItem
-//                 isActive={pathname === "/recursos-humanos"}
-//                 title="Recursos Humanos"
-//                 icon={<HRIcon />}
-//                 href="/recursos-humanos"
-//               />
-//               <CollapseItems
-//                 icon={<ProductsIcon />}
-//                 items={[
-//                   { name: "Control de Costos", href: "/costos" },
-//                   { name: "Gestión de Precios", href: "/precios" },
-//                 ]}
-//                 title="Costos y Precios"
-//               />
-//               <CollapseItems
-//                 icon={<SalesIcon />}
-//                 items={[
-//                   { name: "Estrategias de Venta", href: "/ventas/estrategias" },
-//                   { name: "Licitaciones", href: "/ventas/licitaciones" },
-//                   { name: "Marketing", href: "/ventas/marketing" },
-//                 ]}
-//                 title="Estrategias de Venta"
-//               />
-//               <CollapseItems
-//                 icon={<BudgetIcon />}
-//                 items={[
-//                   { name: "Presupuestos", href: "/presupuestos" },
-//                   { name: "Análisis Financiero", href: "/analisis-financiero" },
-//                 ]}
-//                 title="Presupuestos y Análisis"
-//               />
-//               <CollapseItems
-//                 icon={<InventoryIcon />}
-//                 items={[
-//                   { name: "Producción", href: "/produccion" },
-//                   { name: "Inventarios", href: "/inventarios" },
-//                 ]}
-//                 title="Producción e Inventarios"
-//               />
-//             </SidebarMenu>
 
-//             <SidebarMenu title="Informes y Análisis">
-//               <SidebarItem
-//                 isActive={pathname === "/reportes"}
-//                 title="Informes"
-//                 icon={<ReportsIcon />}
-//                 href="/reportes"
+//               {/* Fase 5: Recursos Humanos */}
+//               <CollapseItems
+//                 icon={<HRIcon />}
+//                 title="Recursos Humanos"
+//                 items={[
+//                   {
+//                     name: "Gestión de Nómina",
+//                     href: "/humanResources/payrollManagement",
+//                   },
+//                   {
+//                     name: "Contratación y Despido de Personal",
+//                     href: "/humanResources/hiringFiring",
+//                   },
+//                   {
+//                     name: "Estructura Organizacional",
+//                     href: "/humanResources/organizationalStructure",
+//                   },
+//                   {
+//                     name: "Impacto en Productividad",
+//                     href: "/humanResources/productivityImpact",
+//                   },
+//                   {
+//                     name: "Historial de Cambios",
+//                     href: "/humanResources/changeHistory",
+//                   },
+//                 ]}
+//                 collapsed={collapsed && !isHovered}
 //               />
-//             </SidebarMenu>
-//           </div>
-//           <div className={Sidebar.Footer()}>
-//             {/* Espacio para futuros elementos del footer si se requieren */}
-//           </div>
+
+//               {/* Add the rest of your phases here */}
+//             </motion.div>
+//           </AnimatePresence>
 //         </div>
 //       </div>
-//     </aside>
+//     </motion.aside>
 //   );
 // };

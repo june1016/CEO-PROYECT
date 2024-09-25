@@ -1,13 +1,13 @@
-// "use client";
-// import React from "react";
-// import BankCreditPanel from "@/components/financialManagement/bankCreditSystem/";
+"use client";
+import React from "react";
+import CashFlowProjectionsPanel from "@/components/financialManagement/cashFlowProjections/cashFlowProjectionsPanel";
 
-// const BankCreditSystemPage: React.FC = () => {
-//   return (
-//     <div className="p-4">
-//       <BankCreditPanel />
-//     </div>
-//   );
-// };
+const cashFlowProjectionsPage: React.FC = () => {
+  return (
+    <div className="p-4">
+      <CashFlowProjectionsPanel />
+    </div>
+  );
+};
 
-// export default BankCreditSystemPage;
+export default cashFlowProjectionsPage;

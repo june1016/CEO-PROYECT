@@ -13,7 +13,10 @@ const bankCreditPanel: React.FC = () => {
         selectedKey={selectedTab}
         onSelectionChange={(key) => setSelectedTab(key as string)}
       >
-        <Tab key="loanApplication" title="Solicitud de préstamos">
+        <Tab
+          key="loanApplication"
+          title="Proyección Mensual de Ingresos y Egresos"
+        >
           <Card>
             <CardBody>
               <LoanApplicationPanel />

@@ -1,16 +1,18 @@
+// types de balance general
 export type BalanceItem = {
   id: string;
   categoria: string;
   subcategoria: string;
   valor: number;
 };
-
+// types de estados financieros
 export type IncomeStatementItem = {
   id: string;
   concepto: string;
   valor: number;
 };
 
+// types de Gestión de Activos y Pasivos
 export type CashBankTransaction = {
   id: string;
   fecha: string;
@@ -73,7 +75,7 @@ export interface FinancialSummary {
   overdueReceivable: number;
   overduePayable: number;
 }
-
+// 3. Sistema de Créditos Bancarios
 export interface LoanData {
   amount: number;
   interestRate: number;
@@ -105,4 +107,25 @@ export interface PaymentSchedule {
   loanId: string;
   amount: number;
   date: string;
+}
+
+// types 4. Flujo de Caja y Proyecciones
+// types 4.1 Proyección Mensual de Ingresos y Egresos
+export interface ProjectionData {
+  month: string;
+  income: number;
+  expenses: number;
+}
+
+// 4.2 Análisis de Liquidez
+export interface LiquidityData {
+  period: string;
+  currentRatio: number;
+  quickRatio: number;
+  cashRatio: number;
+}
+
+export interface CashFlowData {
+  concept: string;
+  amount: number;
 }

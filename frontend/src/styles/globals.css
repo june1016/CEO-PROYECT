@@ -12,15 +12,70 @@ body {
   box-sizing: border-box;
 }
 
-/* Añade estas clases para las transiciones */
+/* Custom scrollbar styles */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(155, 155, 155, 0.2) transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.2);
+  border-radius: 2px;
+}
+
+.custom-scrollbar:hover::-webkit-scrollbar-thumb {
+  background-color: rgba(155, 155, 155, 0.5);
+}
+
+/* Improved transitions and alignments */
 .sidebar-transition {
-  transition: width 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar-expanded {
-  width: 280px;
+.sidebar-item {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.sidebar-collapsed {
-  width: 80px;
+.sidebar-item-content {
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    margin 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.collapsed .sidebar-item-content {
+  opacity: 0;
+  margin-left: 0;
+}
+
+/* Hide scrollbar when sidebar is collapsed */
+.collapsed .custom-scrollbar::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+.collapsed .custom-scrollbar {
+  scrollbar-width: none;
+}
+
+/* Smooth fade-in effect for sidebar items */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.sidebar-item {
+  animation: fadeIn 0.3s ease-out;
 }

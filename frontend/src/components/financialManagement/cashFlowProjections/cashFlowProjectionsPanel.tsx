@@ -1,29 +1,35 @@
-"use client";
-import React, { useState } from "react";
+// src/components/financialManagement/cashFlowProjections/CashFlowProjectionsPanel.tsx
+
+import React from "react";
 import { Tabs, Tab, Card, CardBody } from "@nextui-org/react";
-import LoanApplicationPanel from "@/components/financialManagement/bankCreditSystem/loanApplication/LoanApplicationPanel";
-import PaymentInterestManagementPanel from "@/components/financialManagement/bankCreditSystem/paymentInterestManagement/PaymentInterestManagementPanel";
-const bankCreditPanel: React.FC = () => {
-  const [selectedTab, setSelectedTab] = useState("loanApplication");
+import { useTabSelection } from "@/hooks/useTabSelection";
+import MonthlyProjectionIEPanel from "./MonthlyProjectionIE/MonthlyProjectionIEPanel";
+import LiquidityAnalysisPanel from "./LiquidityAnalysis/LiquidityAnalysisPanel";
+
+const CashFlowProjectionsPanel: React.FC = () => {
+  const { selectedTab, handleTabChange } = useTabSelection("monthlyProjection");
 
   return (
     <div className="flex flex-col space-y-4">
       <Tabs
-        aria-label="Bank Credit System"
+        aria-label="Cash Flow Projections"
         selectedKey={selectedTab}
-        onSelectionChange={(key) => setSelectedTab(key as string)}
+        onSelectionChange={handleTabChange}
       >
-        <Tab key="loanApplication" title="Solicitud de préstamos">
+        <Tab
+          key="monthlyProjection"
+          title="Proyección Mensual de Ingresos y Egresos"
+        >
           <Card>
             <CardBody>
-              <LoanApplicationPanel />
+              <MonthlyProjectionIEPanel />
             </CardBody>
           </Card>
         </Tab>
-        <Tab key="accounts" title="Gestión de pagos y tasas de interés">
+        <Tab key="liquidityAnalysis" title="Análisis de Liquidez">
           <Card>
             <CardBody>
-              <PaymentInterestManagementPanel />
+              <LiquidityAnalysisPanel />
             </CardBody>
           </Card>
         </Tab>
@@ -32,4 +38,4 @@ const bankCreditPanel: React.FC = () => {
   );
 };
 
-export default bankCreditPanel;
+export default CashFlowProjectionsPanel;

@@ -1,10 +1,11 @@
+// frontend/src/components/layout/layoutContext.ts
 "use client";
 
 import { createContext, useContext } from "react";
 
 interface SidebarContext {
   collapsed: boolean;
-  setCollapsed: () => void;
+  setCollapsed: (collapsed: boolean) => void;
 }
 
 export const SidebarContext = createContext<SidebarContext>({

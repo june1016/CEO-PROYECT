@@ -1,14 +1,18 @@
 import React from "react";
 
-export const AcmeIcon = () => {
+interface AcmeIconProps {
+  size?: number;
+}
+
+export const AcmeIcon: React.FC<AcmeIconProps> = ({ size = 32 }) => {
   return (
     <svg
-      width="42"
-      height="42"
+      width={size}
+      height={size}
       viewBox="0 0 56 56"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="w-11 h-12"
+      className="transition-all duration-300 ease-in-out"
     >
       <rect
         className="stroke-divider fill-background"
