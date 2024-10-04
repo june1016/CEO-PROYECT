@@ -1,6 +1,5 @@
 import React, { useRef, useEffect } from "react";
 import Link from "next/link";
-import { useSidebarContext } from "../layout/layoutContext";
 import { Tooltip } from "@nextui-org/react";
 import { motion } from "framer-motion";
 

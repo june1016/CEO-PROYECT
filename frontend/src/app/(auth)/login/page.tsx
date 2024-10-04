@@ -1,8 +1,13 @@
-// import React from "react";
-// import { Login } from "@/components/auth/login";
+"use client";
+import React from "react";
+import LoginForm from "@/components/auth/LoginForm";
 
-// const login = () => {
-//   return <Login />;
-// };
+const LoginPage: React.FC = () => {
+  return (
+    <div className="flex justify-center items-center min-h-screen">
+      <LoginForm />
+    </div>
+  );
+};
 
-// export default login;
+export default LoginPage;

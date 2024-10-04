@@ -1,5 +1,7 @@
 export const routeConfig = {
   "/": "Inicio",
+  "/login": "Iniciar Sesión", // Ruta para el login
+  "/register": "Registrar Cuenta", // Añadir esta ruta para el registro de usuarios
   "/market": "Información de Mercado",
   "/financialManagement": "Gestión Financiera",
   "/financialManagement/financialStatements": "Estados Financieros",

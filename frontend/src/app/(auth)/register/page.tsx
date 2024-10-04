@@ -1,8 +1,12 @@
-// import React from "react";
-// import { Register } from "@/components/auth/register";
+"use client";
+import RegisterForm from "@/components/auth/RegisterForm";
 
-// const register = () => {
-//   return <Register />;
-// };
+const RegisterPage: React.FC = () => {
+  return (
+    <div className="p-4">
+      <RegisterForm />
+    </div>
+  );
+};
 
-// export default register;
+export default RegisterPage;
