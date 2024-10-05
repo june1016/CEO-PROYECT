@@ -1,61 +1,92 @@
-import React, { useState } from "react";
+// src/components/auth/LoginForm.tsx
+import React from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { Input, Button, Card, CardBody, CardHeader } from "@nextui-org/react";
+import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import api from "@/utils/axiosInstance";
-import { useRouter } from "next/navigation"; // Cambiado a useRouter de 'next/navigation'
+import toast from "react-hot-toast";
+import { motion } from "framer-motion";
+
+const loginSchema = z.object({
+  email: z.string().email("Correo electrónico inválido"),
+  password: z.string().min(6, "La contraseña debe tener al menos 6 caracteres"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
 
 const LoginForm: React.FC = () => {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
 
-  const handleLogin = async () => {
+  const onSubmit = async (data: LoginFormData) => {
     try {
-      // Enviar la solicitud de inicio de sesión al backend
-      const response = await api.post("auth/login/", {
-        username,
-        password,
-      });
-
-      // Obtener el token de la respuesta
+      const response = await api.post("auth/login/", data);
       const { access } = response.data;
-
-      // Almacenar el token en las cookies
-      Cookies.set("access_token", access, { expires: 1 }); // Expira en 1 día
-
-      // Redirigir al usuario a la página de inicio
-      router.push("/"); // Uso de router.push en lugar de window.location.href
+      Cookies.set("access_token", access, { expires: 1 });
+      toast.success("Inicio de sesión exitoso");
+      router.push("/");
     } catch (error: any) {
-      // Manejar errores, por ejemplo credenciales incorrectas
-      if (error.response && error.response.status === 401) {
-        setErrorMessage("Nombre de usuario o contraseña incorrectos");
-      } else {
-        setErrorMessage(
-          "Hubo un problema al iniciar sesión. Inténtalo de nuevo."
-        );
-      }
-      console.error("Error al iniciar sesión", error);
+      toast.error(error.response?.data?.detail || "Error al iniciar sesión");
     }
   };
 
   return (
-    <div>
-      <h2>Iniciar Sesión</h2>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <input
-        type="text"
-        placeholder="Nombre de usuario"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Contraseña"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogin}>Iniciar Sesión</button>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <Card>
+        <CardHeader className="flex gap-3">
+          <h1 className="text-2xl font-bold">Iniciar Sesión</h1>
+        </CardHeader>
+        <CardBody>
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+            <Controller
+              name="email"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Correo electrónico"
+                  type="email"
+                  errorMessage={errors.email?.message}
+                />
+              )}
+            />
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Contraseña"
+                  type="password"
+                  errorMessage={errors.password?.message}
+                />
+              )}
+            />
+            <Button
+              type="submit"
+              color="primary"
+              fullWidth
+              isLoading={isSubmitting}
+            >
+              Iniciar Sesión
+            </Button>
+          </form>
+        </CardBody>
+      </Card>
+    </motion.div>
   );
 };
 

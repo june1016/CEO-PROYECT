@@ -1,11 +1,21 @@
+// src/app/(auth)/login/page.tsx
 "use client";
 import React from "react";
 import LoginForm from "@/components/auth/LoginForm";
+import Link from "next/link";
+import { Button } from "@nextui-org/react";
 
 const LoginPage: React.FC = () => {
   return (
-    <div className="flex justify-center items-center min-h-screen">
+    <div className="space-y-4">
       <LoginForm />
+      <div className="text-center">
+        <Link href="/register">
+          <Button color="secondary" variant="flat">
+            ¿No tienes cuenta? Regístrate
+          </Button>
+        </Link>
+      </div>
     </div>
   );
 };

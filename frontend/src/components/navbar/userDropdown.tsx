@@ -8,16 +8,26 @@ import {
 } from "@nextui-org/react";
 import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { deleteAuthCookie } from "@/actions/auth.action";
+import { deleteAuthCookie } from "@/utils/authUtils";
 import { DarkModeSwitch } from "./darkmodeswitch";
+import { useUser } from "@/hooks/useUser"; // Hook para obtener el usuario
 
 export const UserDropdown = () => {
   const router = useRouter();
+  const { data: user, isLoading, isError } = useUser(); // Obtener los datos del usuario
 
-  const handleLogout = useCallback(async () => {
-    await deleteAuthCookie();
-    router.replace("/login");
+  const handleLogout = useCallback(() => {
+    deleteAuthCookie(); // Eliminar el token de las cookies
+    router.replace("/login"); // Redirigir al login
   }, [router]);
+
+  if (isLoading) {
+    return <div>Cargando...</div>; // Mostrar un indicador mientras se cargan los datos
+  }
+
+  if (isError) {
+    return <div>Error al cargar los datos del usuario</div>; // Manejar error en caso de que falle
+  }
 
   return (
     <Dropdown>
@@ -35,7 +45,9 @@ export const UserDropdown = () => {
         <DropdownItem key="profile">
           <div className="flex flex-col">
             <span className="text-sm">Iniciado sesión como</span>
-            <span className="text-sm font-semibold">zoey@example.com</span>
+            <span className="text-sm font-semibold">
+              {user?.email || "Usuario"} {/* Muestra el correo real */}
+            </span>
           </div>
         </DropdownItem>
         <DropdownItem key="settings">Mis ajustes</DropdownItem>
