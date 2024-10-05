@@ -7,7 +7,8 @@ from .views import (
     SetNewPasswordAPIView, 
     FinancialDataListView, 
     RawMaterialInventoryListView, 
-    CustomTokenObtainPairView
+    CustomTokenObtainPairView, 
+    UserDetailView
 )
 
 urlpatterns = [
@@ -15,6 +16,7 @@ urlpatterns = [
     path('auth/register/', RegisterView.as_view(), name='auth_register'),
     path('auth/login/', CustomTokenObtainPairView.as_view(), name='auth_login'),
     path('auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('auth/me/', UserDetailView.as_view(), name='auth_me'),
     
     # Rutas de gestión de contraseñas
     path('auth/request-reset-password/', RequestPasswordResetEmail.as_view(), name='request_reset_password'),

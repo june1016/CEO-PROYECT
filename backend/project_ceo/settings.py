@@ -13,15 +13,16 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False) # ojo esto en producccion
 ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])  # Esto permitirá acceso desde cualquier host, ajústalo en producción
 
-# Configuración de correo electrónico
-# Configuración del correo electrónico
+
+# Configuración del email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_PORT = env.int('EMAIL_PORT')  # Convierte a entero
-EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')  # Convierte a booleano
+EMAIL_PORT = env.int('EMAIL_PORT')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+
 
 # Aplicaciones
 INSTALLED_APPS = [
@@ -99,6 +100,8 @@ REST_FRAMEWORK = {
 
 # Configuración de CORS
 CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=False)
+CORS_ALLOW_CREDENTIALS = env.bool('CORS_ALLOW_CREDENTIALS', default=False)
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  
 
 # Configuración de JWT
 SIMPLE_JWT = {
