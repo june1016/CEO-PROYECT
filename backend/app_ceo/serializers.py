@@ -1,15 +1,12 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import smart_bytes, smart_str, DjangoUnicodeDecodeError
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from .models import User, FinancialData, RawMaterialInventory
 
-# Serializers para el Usuario
+# Serializadores de Usuario
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'email', 'first_name', 'last_name', 'institution', 'group_name', 'role')
+        fields = ('id', 'email', 'first_name', 'last_name', 'institution', 'group_name', 'role')
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
@@ -17,7 +14,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2', 'email', 'first_name', 'last_name', 'institution', 'group_name', 'role')
+        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'institution', 'group_name', 'role')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -26,26 +23,34 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         validated_data.pop('password2')
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create_user(**validated_data)
 
-# 2.5. Configurar Restablecimiento de Contraseña
+    # TODO: Considerar agregar lógica de confirmación de email durante el registro
+
+# Serializadores de Gestión de Contraseñas
 class ResetPasswordEmailRequestSerializer(serializers.Serializer):
     email = serializers.EmailField(min_length=2)
+
+    # TODO: Implementar validación para verificar si el email existe en la base de datos
 
 class SetNewPasswordSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     token = serializers.CharField(min_length=1, write_only=True)
     uidb64 = serializers.CharField(min_length=1, write_only=True)
 
-# 3. Desarrollo de la Fase 3: Información de Apertura
+    # TODO: Agregar un método para validar el token y uidb64 antes de guardar la nueva contraseña
 
+# Serializadores de Datos Financieros
 class FinancialDataSerializer(serializers.ModelSerializer):
     class Meta:
-        model = FinancialData 
+        model = FinancialData
         fields = '__all__'
 
 class RawMaterialInventorySerializer(serializers.ModelSerializer):
+    financial_data = serializers.PrimaryKeyRelatedField(queryset=FinancialData.objects.all())
+
     class Meta:
         model = RawMaterialInventory
         fields = '__all__'
+
+    # TODO: Agregar validación para asegurar la integridad de datos entre financial_data e inventario

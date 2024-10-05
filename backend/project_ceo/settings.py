@@ -1,49 +1,47 @@
-# Código backend\project_ceo\settings.py:
 from pathlib import Path
 import environ
 import os
-from datetime import timedelta  # Importar timedelta
+from datetime import timedelta
 
-# Definir BASE_DIR
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-# Configurar el uso de environ para leer el archivo .env
+# Configuración básica
+BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  # Lee las variables del archivo .env si está presente
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-# Quick-start development settings - unsuitable for production
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-k-_i*v#*qv!)(nctr2m8j1xkd)_kh!6xy1!bfkf$t0c4&cta)v'
+# Configuración de seguridad
+SECRET_KEY = env('SECRET_KEY')
+DEBUG = env.bool('DEBUG', default=False) # ojo esto en producccion
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])  # Esto permitirá acceso desde cualquier host, ajústalo en producción
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Configuración de correo electrónico
+# Configuración del correo electrónico
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_PORT = env.int('EMAIL_PORT')  # Convierte a entero
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS')  # Convierte a booleano
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
-ALLOWED_HOSTS = ['*']  # Esto permitirá acceso desde cualquier host, ajústalo en producción
-
-# Application definition
-
+# Aplicaciones
 INSTALLED_APPS = [
-    # Django default apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
-    # Third-party apps
     'rest_framework',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
-    'corsheaders',               # Soporte para CORS
-    'django_filters',            # Filtrado para las APIs
-    
-    # Your app
+    'corsheaders',
+    'django_filters',
     'app_ceo',
 ]
 
+# Middleware
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',   # Middleware para CORS
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -53,8 +51,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Configuración de URLs y plantillas
 ROOT_URLCONF = 'project_ceo.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -70,77 +68,59 @@ TEMPLATES = [
         },
     },
 ]
-
 WSGI_APPLICATION = 'project_ceo.wsgi.application'
 
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+# Base de datos
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DB_NAME'),           # Nombre de la base de datos
-        'USER': env('DB_USER'),           # Usuario de la base de datos
-        'PASSWORD': env('DB_PASSWORD'),   # Contraseña del usuario
-        'HOST': env('DB_HOST'),           # Dirección del host (por ejemplo, localhost o la IP del servidor)
-        'PORT': env('DB_PORT'),           # Puerto de la base de datos (por defecto es 5432 para PostgreSQL)
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST'),
+        'PORT': env('DB_PORT', default='5432'),
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
+# Validación de contraseñas
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Rest Framework Configuration
+# Configuración de REST Framework
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated',),
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 }
 
-# CORS Headers Configuration
-CORS_ALLOW_ALL_ORIGINS = True  # Esto permite que cualquier dominio haga peticiones, ajusta en producción
+# Configuración de CORS
+CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=False)
 
-# JWT Token settings (opcional, puedes ajustarlo si lo necesitas)
+# Configuración de JWT
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  # Duración del token de acceso
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),     # Duración del token de refresco
-    'ROTATE_REFRESH_TOKENS': False,
-    'BLACKLIST_AFTER_ROTATION': True,
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
 }
 
-# Internationalization
-# https://docs.djangoproject.com/en/5.0/topics/i18n/
+# Internacionalización
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.0/howto/static-files/
+# Archivos estáticos
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Authentication User Model (opcional, si tienes un modelo personalizado de usuario)
+# Modelo de usuario personalizado
 AUTH_USER_MODEL = 'app_ceo.User'
+
+# TODO: Agregar configuración de logging para monitorear errores en producción
+# TODO: Considerar habilitar `SECURE_SSL_REDIRECT` en producción para forzar HTTPS
