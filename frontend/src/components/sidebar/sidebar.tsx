@@ -98,10 +98,10 @@ export const SidebarWrapper = () => {
               <Suspense fallback={<div>Loading...</div>}>
                 <SidebarMenu title="Gestión de Empresa" collapsed={isCollapsed}>
                   <SidebarItem
-                    isActive={pathname === "/market"}
-                    title="Información de Mercado"
+                    isActive={pathname === "/openingInformation"}
+                    title="Información de Apertura"
                     icon={<LazyMarketIcon />}
-                    href="/market"
+                    href="/openingInformation"
                     collapsed={isCollapsed}
                   />
                   <SidebarItem

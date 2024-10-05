@@ -1,3 +1,4 @@
+// src/components/shared/responsiveTable.tsx
 "use client";
 import React from "react";
 import {
@@ -11,6 +12,7 @@ import {
   CardBody,
   SortDescriptor,
 } from "@nextui-org/react";
+import { motion } from "framer-motion";
 
 interface ResponsiveTableProps {
   columns: { name: string; uid: string; sortable?: boolean }[];
@@ -45,8 +47,12 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
 
   return (
     <>
-      {/* Tabla para pantallas más grandes */}
-      <div className="hidden md:block">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="hidden md:block"
+      >
         <Table
           aria-label="Tabla de datos"
           sortDescriptor={sortDescriptor}
@@ -73,26 +79,37 @@ export const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
             )}
           </TableBody>
         </Table>
-      </div>
+      </motion.div>
 
-      {/* Tarjetas para dispositivos móviles */}
-      <div className="md:hidden space-y-4">
-        {items.map((item) => (
-          <Card key={item.id}>
-            <CardBody>
-              {columns.map((column) => (
-                <div
-                  key={column.uid}
-                  className="flex justify-between items-center py-1"
-                >
-                  <span className="font-bold">{column.name}</span>
-                  <span>{renderCell(item, column.uid)}</span>
-                </div>
-              ))}
-            </CardBody>
-          </Card>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="md:hidden space-y-4"
+      >
+        {items.map((item, index) => (
+          <motion.div
+            key={item.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: index * 0.1 }}
+          >
+            <Card>
+              <CardBody>
+                {columns.map((column) => (
+                  <div
+                    key={column.uid}
+                    className="flex justify-between items-center py-1"
+                  >
+                    <span className="font-bold">{column.name}</span>
+                    <span>{renderCell(item, column.uid)}</span>
+                  </div>
+                ))}
+              </CardBody>
+            </Card>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </>
   );
 };
