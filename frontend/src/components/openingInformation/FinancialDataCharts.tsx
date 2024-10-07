@@ -1,6 +1,8 @@
-// src/components/openingInformation/FinancialDataCharts.tsx
 import React from "react";
-import { useFinancialData } from "@/hooks/openingInformation/useFinancialData";
+import {
+  useFinancialData,
+  FinancialData,
+} from "@/hooks/openingInformation/useFinancialData";
 import {
   BarChart,
   Bar,
@@ -14,7 +16,7 @@ import {
 import { Spinner } from "@nextui-org/react";
 
 interface FinancialDataChartsProps {
-  filterValue: string; // Definir `filterValue` en los props
+  filterValue: string;
 }
 
 const FinancialDataCharts: React.FC<FinancialDataChartsProps> = ({
@@ -25,26 +27,23 @@ const FinancialDataCharts: React.FC<FinancialDataChartsProps> = ({
   if (isLoading) return <Spinner />;
   if (error) return <div>Error al cargar los datos financieros</div>;
 
-  // Filtrar los datos según el valor de búsqueda (`filterValue`)
   const filteredData = financialData?.filter((item) =>
     Object.values(item).some((val) =>
-      typeof val === "string"
-        ? val.toLowerCase().includes(filterValue.toLowerCase())
-        : val.toString().toLowerCase().includes(filterValue.toLowerCase())
+      val?.toString().toLowerCase().includes(filterValue.toLowerCase())
     )
   );
 
   const chartData = filteredData?.[0]
     ? [
-        { name: "Efectivo", value: filteredData[0].cash },
-        { name: "Bancos", value: filteredData[0].banks },
+        { name: "Efectivo en caja", value: filteredData[0].cash_on_hand },
+        { name: "Efectivo en banco", value: filteredData[0].cash_in_bank },
         {
           name: "Equipo de Cómputo",
           value: filteredData[0].computer_equipment,
         },
         { name: "Mobiliario", value: filteredData[0].furniture_fixtures },
         { name: "Maquinaria", value: filteredData[0].machinery_equipment },
-        { name: "Capital", value: filteredData[0].capital },
+        { name: "Capital social", value: filteredData[0].capital_stock },
       ]
     : [];
 

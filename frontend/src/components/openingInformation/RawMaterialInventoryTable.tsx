@@ -6,34 +6,44 @@ import { formatCurrency } from "@/utils/formatters";
 import { useFinancialData } from "@/hooks/openingInformation/useFinancialData";
 
 interface RawMaterialInventoryTableProps {
-  filterValue: string; // Definir `filterValue` en los props
+  filterValue: string;
 }
 
 const RawMaterialInventoryTable: React.FC<RawMaterialInventoryTableProps> = ({
   filterValue,
 }) => {
-  const { data: financialData } = useFinancialData();
-  const financialDataId = financialData?.[0]?.id;
+  const {
+    data: financialData,
+    isLoading: isLoadingFinancialData,
+    error: errorFinancialData,
+  } = useFinancialData();
+
+  const financialDataId =
+    financialData && financialData.length > 0 ? financialData[0].id : null;
 
   const {
     data: inventoryData,
-    isLoading,
-    error,
+    isLoading: isLoadingInventory,
+    error: errorInventory,
   } = useRawMaterialInventory(financialDataId);
 
-  if (isLoading) return <Spinner />;
-  if (error) return <div>Error al cargar el inventario de materia prima</div>;
+  if (isLoadingFinancialData || isLoadingInventory) return <Spinner />;
+  if (errorFinancialData)
+    return <div>Error al cargar los datos financieros</div>;
+  if (errorInventory)
+    return <div>Error al cargar el inventario de materia prima</div>;
 
-  // Filtrar los datos según el valor de búsqueda (`filterValue`)
+  if (!financialDataId) return <div>No se encontró información financiera</div>;
+
   const filteredData = inventoryData?.filter((item) =>
-    Object.values(item).some((val) =>
-      typeof val === "string"
-        ? val.toLowerCase().includes(filterValue.toLowerCase())
-        : val.toString().toLowerCase().includes(filterValue.toLowerCase())
+    Object.values(item).some(
+      (val) =>
+        val !== null &&
+        val !== undefined &&
+        val.toString().toLowerCase().includes(filterValue.toLowerCase())
     )
   );
 
-  // Definir las columnas para la tabla
   const columns = [
     { name: "Código", uid: "material_code" },
     { name: "Descripción", uid: "description" },
@@ -43,7 +53,6 @@ const RawMaterialInventoryTable: React.FC<RawMaterialInventoryTableProps> = ({
     { name: "Costo Total", uid: "total_cost" },
   ];
 
-  // Renderizar cada celda de la tabla
   const renderCell = (item: any, columnKey: React.Key) => {
     const value = item[columnKey as keyof typeof item];
     if (
@@ -51,10 +60,8 @@ const RawMaterialInventoryTable: React.FC<RawMaterialInventoryTableProps> = ({
       (columnKey === "cost_per_unit" || columnKey === "total_cost")
     ) {
       return formatCurrency(value);
-    } else if (typeof value === "object" && value !== null) {
-      return JSON.stringify(value); // Convertir objetos a string para renderizar
     }
-    return value?.toString() || ""; // Retornar valor como string o una cadena vacía si es null/undefined
+    return value?.toString() || "";
   };
 
   return (

@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import api from "@/utils/axiosInstance";
 
-interface RawMaterialInventory {
+// Definición de la interfaz RawMaterialInventory
+export interface RawMaterialInventory {
   id: number;
   material_code: string;
   description: string;
@@ -11,10 +12,10 @@ interface RawMaterialInventory {
   total_cost: number;
   created_at: string;
   updated_at: string;
-  financial_data_id: number;
+  financial_data: number;
 }
 
-export const useRawMaterialInventory = (financialDataId: number) => {
+export const useRawMaterialInventory = (financialDataId: number | null) => {
   return useQuery({
     queryKey: ["rawMaterialInventory", financialDataId],
     queryFn: async (): Promise<RawMaterialInventory[]> => {

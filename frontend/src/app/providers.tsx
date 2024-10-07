@@ -1,5 +1,6 @@
 "use client";
-import * as React from "react";
+
+import React from "react";
 import { NextUIProvider } from "@nextui-org/system";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { ThemeProviderProps } from "next-themes/dist/types";
@@ -11,7 +12,6 @@ export interface ProvidersProps {
   themeProps?: ThemeProviderProps;
 }
 
-// Crear un cliente de React Query
 const queryClient = new QueryClient();
 
 export function Providers({ children, themeProps }: ProvidersProps) {
@@ -22,10 +22,8 @@ export function Providers({ children, themeProps }: ProvidersProps) {
         attribute="class"
         {...themeProps}
       >
-        {/* Proveer el cliente de React Query */}
         <QueryClientProvider client={queryClient}>
           {children}
-          {/* Añadir Toaster aquí para que esté disponible globalmente */}
           <Toaster position="top-center" reverseOrder={false} />
         </QueryClientProvider>
       </NextThemesProvider>

@@ -21,17 +21,17 @@ const OpeningInformationTabs: React.FC = () => {
     {
       key: "financialData",
       title: "Datos Financieros",
-      content: <FinancialDataTable filterValue={filterValue} />, // Asegurarse de que `filterValue` esté definido en el componente
+      content: <FinancialDataTable filterValue={filterValue} />,
     },
     {
       key: "rawMaterialInventory",
       title: "Inventario de Materia Prima",
-      content: <RawMaterialInventoryTable filterValue={filterValue} />, // Asegurarse de que `filterValue` esté definido en el componente
+      content: <RawMaterialInventoryTable filterValue={filterValue} />,
     },
     {
       key: "financialCharts",
       title: "Gráficos Financieros",
-      content: <FinancialDataCharts filterValue={filterValue} />, // Asegurarse de que `filterValue` esté definido en el componente
+      content: <FinancialDataCharts filterValue={filterValue} />,
     },
   ];
 
