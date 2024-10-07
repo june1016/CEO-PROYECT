@@ -10,9 +10,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
 # Configuración de seguridad
 SECRET_KEY = env('SECRET_KEY')
-DEBUG = env.bool('DEBUG', default=False) # ojo esto en producccion
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])  # Esto permitirá acceso desde cualquier host, ajústalo en producción
-
+DEBUG = env.bool('DEBUG', default=False)
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])  # Ajusta en producción
 
 # Configuración del email
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -23,8 +22,7 @@ EMAIL_HOST_USER = env('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 
-
-# Aplicaciones
+# Aplicaciones instaladas
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -100,8 +98,8 @@ REST_FRAMEWORK = {
 
 # Configuración de CORS
 CORS_ALLOW_ALL_ORIGINS = env.bool('CORS_ALLOW_ALL_ORIGINS', default=False)
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  # Puedes añadir más dominios aquí en producción
 CORS_ALLOW_CREDENTIALS = env.bool('CORS_ALLOW_CREDENTIALS', default=False)
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]  
 
 # Configuración de JWT
 SIMPLE_JWT = {
@@ -125,5 +123,32 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 # Modelo de usuario personalizado
 AUTH_USER_MODEL = 'app_ceo.User'
 
-# TODO: Agregar configuración de logging para monitorear errores en producción
-# TODO: Considerar habilitar `SECURE_SSL_REDIRECT` en producción para forzar HTTPS
+# Configuración de logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+        'django.server': {
+            'handlers': ['console'],
+            'level': 'WARNING',
+            'propagate': False,
+        },
+    },
+}
+
+# TODO: Considerar habilitar `SECURE_SSL_REDIRECT` en producción para forzar HTTPS.
+SECURE_SSL_REDIRECT = env.bool('SECURE_SSL_REDIRECT', default=False)  # Forzar HTTPS en producción

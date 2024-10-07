@@ -8,7 +8,8 @@ from .views import (
     FinancialDataListView, 
     RawMaterialInventoryListView, 
     CustomTokenObtainPairView, 
-    UserDetailView
+    UserDetailView,
+    GroupListView
 )
 
 urlpatterns = [
@@ -22,6 +23,9 @@ urlpatterns = [
     path('auth/request-reset-password/', RequestPasswordResetEmail.as_view(), name='request_reset_password'),
     path('auth/password-reset/<uidb64>/<token>/', PasswordTokenCheckAPI.as_view(), name='password_reset_confirm'),
     path('auth/password-reset-complete/', SetNewPasswordAPIView.as_view(), name='password_reset_complete'),
+
+    # Rutas de grupos
+    path('groups/', GroupListView.as_view(), name='group_list'),
 
     # Rutas de datos financieros e inventario
     path('financial-data/', FinancialDataListView.as_view(), name='financial_data_list'),

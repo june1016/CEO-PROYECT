@@ -1,51 +1,65 @@
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
-from .models import User, FinancialData, RawMaterialInventory
+from .models import User, Group, FinancialData, RawMaterialInventory
 
-# Serializadores de Usuario
+# Serializador de Usuario
 class UserSerializer(serializers.ModelSerializer):
+    group_name = serializers.CharField(source='group.name', read_only=True)
+
     class Meta:
         model = User
-        fields = ('id', 'email', 'first_name', 'last_name', 'institution', 'group_name', 'role')
+        fields = ('id', 'email', 'first_name', 'last_name', 'institution', 'role', 'group', 'group_name')
+        read_only_fields = ['id']
 
+# Serializador para Registro de Usuario
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'institution', 'group_name', 'role')
+        fields = ('email', 'password', 'password2', 'first_name', 'last_name', 'institution', 'role')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({'password': 'Las contraseñas no coinciden.'})
+            raise serializers.ValidationError({"password": "Las contraseñas no coinciden."})
         return attrs
 
     def create(self, validated_data):
         validated_data.pop('password2')
-        return User.objects.create_user(**validated_data)
+        user = User.objects.create_user(**validated_data)
+        return user
+    
+# Serializador para el modelo Group
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ('id', 'name', 'tutor')
 
-    # TODO: Considerar agregar lógica de confirmación de email durante el registro
-
-# Serializadores de Gestión de Contraseñas
-class ResetPasswordEmailRequestSerializer(serializers.Serializer):
-    email = serializers.EmailField(min_length=2)
-
-    # TODO: Implementar validación para verificar si el email existe en la base de datos
-
-class SetNewPasswordSerializer(serializers.Serializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    token = serializers.CharField(min_length=1, write_only=True)
-    uidb64 = serializers.CharField(min_length=1, write_only=True)
-
-    # TODO: Agregar un método para validar el token y uidb64 antes de guardar la nueva contraseña
-
-# Serializadores de Datos Financieros
+# Serializador para el modelo FinancialData
 class FinancialDataSerializer(serializers.ModelSerializer):
+    group = serializers.StringRelatedField(read_only=True)
+    total_assets = serializers.DecimalField(max_digits=15, decimal_places=2, read_only=True)
+    total_liabilities = serializers.DecimalField(max_digits=15, decimal_places=2, read_only=True)
+    total_equity = serializers.DecimalField(max_digits=15, decimal_places=2, read_only=True)
+
     class Meta:
         model = FinancialData
         fields = '__all__'
 
+    def validate(self, data):
+        if data.get('cash_on_hand', 0) < 0: 
+            raise serializers.ValidationError("El dinero en caja no puede ser negativo.")
+        return data
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['total_assets'] = instance.total_assets()
+        representation['total_liabilities'] = instance.total_liabilities()
+        representation['total_equity'] = instance.total_equity()
+        return representation
+
+# Serializador para el modelo RawMaterialInventory
 class RawMaterialInventorySerializer(serializers.ModelSerializer):
     financial_data = serializers.PrimaryKeyRelatedField(queryset=FinancialData.objects.all())
 
@@ -53,4 +67,29 @@ class RawMaterialInventorySerializer(serializers.ModelSerializer):
         model = RawMaterialInventory
         fields = '__all__'
 
-    # TODO: Agregar validación para asegurar la integridad de datos entre financial_data e inventario
+    def validate(self, data):
+        if data['quantity'] <= 0:
+            raise serializers.ValidationError("La cantidad de materia prima debe ser mayor que cero.")
+        return data
+
+# Serializador para Solicitud de Restablecimiento de Contraseña por Email
+class ResetPasswordEmailRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField(min_length=2)
+
+    class Meta:
+        fields = ['email']
+
+# Serializador para Establecer Nueva Contraseña (después de restablecer)
+class SetNewPasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = serializers.CharField(write_only=True, required=True)
+    token = serializers.CharField(min_length=1, write_only=True)
+    uidb64 = serializers.CharField(min_length=1, write_only=True)
+
+    class Meta:
+        fields = ['password', 'password2', 'token', 'uidb64']
+
+    def validate(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({'password': 'Las contraseñas no coinciden.'})
+        return attrs
