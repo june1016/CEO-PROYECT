@@ -1,7 +1,9 @@
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.db import models
-from django.core.validators import EmailValidator
-# from django.contrib.auth.models import Group
+from django.utils import timezone
+from django.core.exceptions import ValidationError
+
+# Fase 1(Autenticación y Gestión de Usuarios)
 
 # Gestor de usuarios personalizado
 class CustomUserManager(BaseUserManager):
@@ -9,6 +11,10 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('El email es obligatorio')
         email = self.normalize_email(email)
+        # Asignar rol predeterminado si no se proporciona
+        if not extra_fields.get('role'):
+            default_role = Role.objects.get_or_create(name='student')[0]
+            extra_fields['role'] = default_role
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -18,102 +24,89 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('role', 'admin')
+        admin_role = Role.objects.get_or_create(name='admin')[0]
+        extra_fields['role'] = admin_role
         return self.create_user(email, password, **extra_fields)
 
-class Group(models.Model):
+
+# Modelo de Institución
+class Institution(models.Model):
     name = models.CharField(max_length=255, unique=True)
-    tutor = models.ForeignKey('User', on_delete=models.SET_NULL, null=True, related_name='tutored_groups')
+    address = models.CharField(max_length=255, blank=True)
+    contact_info = models.CharField(max_length=255, blank=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.name
 
+# Modelo de Rol
+class Role(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+# Modelo de Usuario Personalizado
 class User(AbstractUser):
-    username = None
+    username = None  # Eliminamos el campo username
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    institution = models.CharField(max_length=100)
-    ROLE_CHOICES = [
-        ('student', 'Estudiante'),
-        ('tutor', 'Tutor'),
-        ('admin', 'Administrador'),
-    ]
-    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='student')
-    group = models.ForeignKey(Group, on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
+    institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, null=True)
+    role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
+    group = models.ForeignKey('Group', on_delete=models.SET_NULL, null=True, blank=True, related_name='students')
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name', 'last_name']  # Eliminamos 'role' de aquí
+
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    is_superuser = models.BooleanField(default=False)
 
     objects = CustomUserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'institution']
-
     def __str__(self):
-        return self.email
-
-# Modelo de datos financieros
-class FinancialData(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name='financial_data')
-    company_name = models.CharField(max_length=255)
-    cash_on_hand = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    cash_in_bank = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    accounts_receivable = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    inventory = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    computer_equipment = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    furniture_fixtures = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    machinery_equipment = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    patents = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    accounts_payable = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    notes_payable = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    long_term_debt = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    capital_stock = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    retained_earnings = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    projected_sales = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    operating_costs = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+        return f"{self.email} ({self.role})"
+    
+    class Meta:
+        indexes = [
+            models.Index(fields=['email']),
+            models.Index(fields=['institution', 'role']),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=['email'], name='unique_email'),
+        ]
+    
+# Modelo de Grupo #TODO: NEW
+class Group(models.Model):
+    name = models.CharField(max_length=100)
+    tutor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tutored_groups')
+    institution = models.ForeignKey(Institution, on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def total_assets(self):
-        return sum([
-            self.cash_on_hand, self.cash_in_bank, self.accounts_receivable,
-            self.inventory, self.computer_equipment, self.furniture_fixtures,
-            self.machinery_equipment, self.patents
-        ])
-
-    def total_liabilities(self):
-        return sum([self.accounts_payable, self.notes_payable, self.long_term_debt])
-
-    def total_equity(self):
-        """Calcula el patrimonio total"""
-        return self.capital_stock + self.retained_earnings
-
     def __str__(self):
-        return f"Datos financieros de {self.company_name} - Grupo {self.group.name}"
+        return self.name
 
-    class Meta:
-        verbose_name = "Dato Financiero"
-        verbose_name_plural = "Datos Financieros"
-        ordering = ['-created_at']
+    def clean(self):
+        # Asegurarse de que el tutor tenga el rol de 'tutor'
+        if self.tutor.role.name != 'tutor':
+            raise ValidationError('El usuario asignado como tutor debe tener el rol de tutor.')
 
-# Modelo de inventario de materia prima
-class RawMaterialInventory(models.Model):
-    financial_data = models.ForeignKey(FinancialData, on_delete=models.CASCADE, related_name='raw_materials')
-    material_code = models.CharField(max_length=50)
-    description = models.CharField(max_length=255)
-    quantity = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    unit = models.CharField(max_length=50)
-    cost_per_unit = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    total_cost = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+# Modelo de Códigos de Registro
+class RegistrationCode(models.Model):
+    code = models.CharField(max_length=50, unique=True)
+    role = models.ForeignKey(Role, on_delete=models.CASCADE)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, null=True, blank=True)
+    is_used = models.BooleanField(default=False)
+    expiry_date = models.DateField()
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
 
-    def save(self, *args, **kwargs):
-        self.total_cost = self.quantity * self.cost_per_unit
-        super().save(*args, **kwargs)
-
     def __str__(self):
-        return f"{self.material_code} - {self.description}"
+        return f"{self.code} ({self.role.name})"
 
-    class Meta:
-        verbose_name = "Inventario de Materia Prima"
-        verbose_name_plural = "Inventario de Materia Prima"
-        ordering = ['-created_at']
+    def is_valid(self):
+        return not self.is_used and self.expiry_date >= timezone.now().date()
+

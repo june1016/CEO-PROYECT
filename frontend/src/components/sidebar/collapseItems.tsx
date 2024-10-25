@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
 import { SidebarItem } from "./sidebarItem";
-import { useSidebarContext } from "../layout/layoutContext";
+import { useSidebarContext } from "@/app/(app)/layout";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface Props {

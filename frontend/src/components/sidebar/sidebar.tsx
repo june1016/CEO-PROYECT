@@ -6,7 +6,7 @@ import { SidebarItem } from "./sidebarItem";
 import { SidebarMenu } from "./sidebarMenu";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useSidebarCollapse } from "../../hooks/useSidebarCollapse";
+import { useSidebarCollapse } from "../../hooks/sidebar/useSidebarCollapse";
 
 // Lazy load other components
 const LazyCollapseItems = lazy(() =>
@@ -50,11 +50,25 @@ const LazyReportsIcon = lazy(() =>
     default: mod.ReportsIcon,
   }))
 );
+const LazyGroupsIcon = lazy(() =>
+  import("../icons/sidebar/reportsIcon").then((mod) => ({
+    default: mod.ReportsIcon,
+  }))
+);
+
+const LazyRegistrationCodesIcon = lazy(() =>
+  import("../icons/sidebar/reportsIcon").then((mod) => ({
+    default: mod.ReportsIcon,
+  }))
+);
 
 export const SidebarWrapper = () => {
   const pathname = usePathname();
   const { isCollapsed, handleMouseEnter, handleMouseLeave } =
     useSidebarCollapse();
+
+  // Supongamos que tienes una forma de obtener el rol del usuario
+  const role = "tutor"; // Esto debería ser dinámico, basado en la autenticación del usuario
 
   const sidebarVariants = {
     expanded: { width: "280px" },
@@ -96,162 +110,184 @@ export const SidebarWrapper = () => {
                 collapsed={isCollapsed}
               />
               <Suspense fallback={<div>Loading...</div>}>
-                <SidebarMenu title="Gestión de Empresa" collapsed={isCollapsed}>
-                  <SidebarItem
-                    isActive={pathname === "/openingInformation"}
-                    title="Información de Apertura"
-                    icon={<LazyMarketIcon />}
-                    href="/openingInformation"
-                    collapsed={isCollapsed}
-                  />
-                  <SidebarItem
-                    isActive={pathname === "/companyObjectives"}
-                    title="Objetivos Empresariales"
-                    icon={<LazyObjectivesIcon />}
-                    href="/companyObjectives"
-                    collapsed={isCollapsed}
-                  />
-                </SidebarMenu>
+                {role === "tutor" ? (
+                  <>
+                    <SidebarItem
+                      icon={<LazyGroupsIcon />}
+                      href="/tutor/groups"
+                      title="Mis Grupos"
+                      collapsed={isCollapsed}
+                    />
+                    <SidebarItem
+                      icon={<LazyRegistrationCodesIcon />}
+                      href="/tutor/registrationCodes"
+                      title="Códigos de Registro"
+                      collapsed={isCollapsed}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <SidebarMenu
+                      title="Gestión de Empresa"
+                      collapsed={isCollapsed}
+                    >
+                      <SidebarItem
+                        isActive={pathname === "/openingInformation"}
+                        title="Información de Apertura"
+                        icon={<LazyMarketIcon />}
+                        href="/openingInformation"
+                        collapsed={isCollapsed}
+                      />
+                      <SidebarItem
+                        isActive={pathname === "/companyObjectives"}
+                        title="Objetivos Empresariales"
+                        icon={<LazyObjectivesIcon />}
+                        href="/companyObjectives"
+                        collapsed={isCollapsed}
+                      />
+                    </SidebarMenu>
 
-                <LazyCollapseItems
-                  icon={<LazyFinanceIcon />}
-                  title="Gestión Financiera"
-                  items={[
-                    {
-                      name: "Estados Financieros",
-                      href: "/financialManagement/financialStatements",
-                    },
-                    {
-                      name: "Gestión de Activos y Pasivos",
-                      href: "/financialManagement/assetLiabilityManagement",
-                    },
-                    {
-                      name: "Sistema de Créditos Bancarios",
-                      href: "/financialManagement/BankCreditSystem",
-                    },
-                    {
-                      name: "Flujo de Caja y Proyecciones",
-                      href: "/financialManagement/cashFlowProjections",
-                    },
-                    {
-                      name: "Presupuestos y Análisis Financiero",
-                      href: "/financialManagement/budgetAnalysis",
-                    },
-                  ]}
-                  collapsed={isCollapsed}
-                />
+                    <LazyCollapseItems
+                      icon={<LazyFinanceIcon />}
+                      title="Gestión Financiera"
+                      items={[
+                        {
+                          name: "Estados Financieros",
+                          href: "/financialManagement/financialStatements",
+                        },
+                        {
+                          name: "Gestión de Activos y Pasivos",
+                          href: "/financialManagement/assetLiabilityManagement",
+                        },
+                        {
+                          name: "Sistema de Créditos Bancarios",
+                          href: "/financialManagement/BankCreditSystem",
+                        },
+                        {
+                          name: "Flujo de Caja y Proyecciones",
+                          href: "/financialManagement/cashFlowProjections",
+                        },
+                        {
+                          name: "Presupuestos y Análisis Financiero",
+                          href: "/financialManagement/budgetAnalysis",
+                        },
+                      ]}
+                      collapsed={isCollapsed}
+                    />
 
-                <LazyCollapseItems
-                  icon={<LazyHRIcon />}
-                  title="Recursos Humanos"
-                  items={[
-                    {
-                      name: "Gestión de Nómina",
-                      href: "/humanResources/payrollManagement",
-                    },
-                    {
-                      name: "Contratación y Despido de Personal",
-                      href: "/humanResources/hiringFiring",
-                    },
-                    {
-                      name: "Estructura Organizacional",
-                      href: "/humanResources/organizationalStructure",
-                    },
-                    {
-                      name: "Impacto en Productividad",
-                      href: "/humanResources/productivityImpact",
-                    },
-                    {
-                      name: "Historial de Cambios",
-                      href: "/humanResources/changeHistory",
-                    },
-                  ]}
-                  collapsed={isCollapsed}
-                />
+                    <LazyCollapseItems
+                      icon={<LazyHRIcon />}
+                      title="Recursos Humanos"
+                      items={[
+                        {
+                          name: "Gestión de Nómina",
+                          href: "/humanResources/payrollManagement",
+                        },
+                        {
+                          name: "Contratación y Despido de Personal",
+                          href: "/humanResources/hiringFiring",
+                        },
+                        {
+                          name: "Estructura Organizacional",
+                          href: "/humanResources/organizationalStructure",
+                        },
+                        {
+                          name: "Impacto en Productividad",
+                          href: "/humanResources/productivityImpact",
+                        },
+                        {
+                          name: "Historial de Cambios",
+                          href: "/humanResources/changeHistory",
+                        },
+                      ]}
+                      collapsed={isCollapsed}
+                    />
 
-                <LazyCollapseItems
-                  icon={<LazyProductionIcon />}
-                  title="Producción"
-                  items={[
-                    {
-                      name: "Gestión de Inventario",
-                      href: "/production/inventoryManagement",
-                    },
-                    {
-                      name: "Planificación de Producción",
-                      href: "/production/productionPlanning",
-                    },
-                    {
-                      name: "Control de Calidad",
-                      href: "/production/qualityControl",
-                    },
-                    {
-                      name: "Mantenimiento de Equipos",
-                      href: "/production/equipmentMaintenance",
-                    },
-                  ]}
-                  collapsed={isCollapsed}
-                />
+                    <LazyCollapseItems
+                      icon={<LazyProductionIcon />}
+                      title="Producción"
+                      items={[
+                        {
+                          name: "Gestión de Inventario",
+                          href: "/production/inventoryManagement",
+                        },
+                        {
+                          name: "Planificación de Producción",
+                          href: "/production/productionPlanning",
+                        },
+                        {
+                          name: "Control de Calidad",
+                          href: "/production/qualityControl",
+                        },
+                        {
+                          name: "Mantenimiento de Equipos",
+                          href: "/production/equipmentMaintenance",
+                        },
+                      ]}
+                      collapsed={isCollapsed}
+                    />
 
-                <LazyCollapseItems
-                  icon={<LazyCostIcon />}
-                  title="Costos"
-                  items={[
-                    {
-                      name: "Análisis de Costos",
-                      href: "/costs/costAnalysis",
-                    },
-                    {
-                      name: "Gestión de Proveedores",
-                      href: "/costs/supplierManagement",
-                    },
-                    {
-                      name: "Optimización de Costos",
-                      href: "/costs/costOptimization",
-                    },
-                  ]}
-                  collapsed={isCollapsed}
-                />
+                    <LazyCollapseItems
+                      icon={<LazyCostIcon />}
+                      title="Costos"
+                      items={[
+                        {
+                          name: "Análisis de Costos",
+                          href: "/costs/costAnalysis",
+                        },
+                        {
+                          name: "Gestión de Proveedores",
+                          href: "/costs/supplierManagement",
+                        },
+                        {
+                          name: "Optimización de Costos",
+                          href: "/costs/costOptimization",
+                        },
+                      ]}
+                      collapsed={isCollapsed}
+                    />
 
-                <LazyCollapseItems
-                  icon={<LazySalesIcon />}
-                  title="Ventas y Marketing"
-                  items={[
-                    {
-                      name: "Gestión de Clientes",
-                      href: "/salesMarketing/customerManagement",
-                    },
-                    {
-                      name: "Campañas de Marketing",
-                      href: "/salesMarketing/marketingCampaigns",
-                    },
-                    {
-                      name: "Análisis de Ventas",
-                      href: "/salesMarketing/salesAnalysis",
-                    },
-                  ]}
-                  collapsed={isCollapsed}
-                />
+                    <LazyCollapseItems
+                      icon={<LazySalesIcon />}
+                      title="Ventas y Marketing"
+                      items={[
+                        {
+                          name: "Gestión de Clientes",
+                          href: "/salesMarketing/customerManagement",
+                        },
+                        {
+                          name: "Campañas de Marketing",
+                          href: "/salesMarketing/marketingCampaigns",
+                        },
+                        {
+                          name: "Análisis de Ventas",
+                          href: "/salesMarketing/salesAnalysis",
+                        },
+                      ]}
+                      collapsed={isCollapsed}
+                    />
 
-                <LazyCollapseItems
-                  icon={<LazyReportsIcon />}
-                  title="Informes y Análisis"
-                  items={[
-                    {
-                      name: "Informes Financieros",
-                      href: "/reports/financialReports",
-                    },
-                    {
-                      name: "Análisis de Rendimiento",
-                      href: "/reports/performanceAnalysis",
-                    },
-                    {
-                      name: "Proyecciones de Negocio",
-                      href: "/reports/businessProjections",
-                    },
-                  ]}
-                  collapsed={isCollapsed}
-                />
+                    <LazyCollapseItems
+                      icon={<LazyReportsIcon />}
+                      title="Informes y Análisis"
+                      items={[
+                        {
+                          name: "Informes Financieros",
+                          href: "/reports/financialReports",
+                        },
+                        {
+                          name: "Análisis de Rendimiento",
+                          href: "/reports/performanceAnalysis",
+                        },
+                        {
+                          name: "Proyecciones de Negocio",
+                          href: "/reports/businessProjections",
+                        },
+                      ]}
+                      collapsed={isCollapsed}
+                    />
+                  </>
+                )}
               </Suspense>
             </motion.div>
           </AnimatePresence>

@@ -29,7 +29,10 @@
     "next-env.d.ts",
     "src/**/*.ts",
     "src/**/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "src/hooks/navbar/useUser.ts",
+    "Trash/hooks/sidebar copy.tsx",
+    "Trash/hooks/useSidebar.ts"
   ],
   "exclude": ["node_modules"]
 }

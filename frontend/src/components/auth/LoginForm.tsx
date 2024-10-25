@@ -1,4 +1,3 @@
-// src/components/auth/LoginForm.tsx
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -6,9 +5,10 @@ import { z } from "zod";
 import { Input, Button, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import api from "@/utils/axiosInstance";
+import api from "@/services/axiosInstance";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const loginSchema = z.object({
   email: z.string().email("Correo electrónico inválido"),
@@ -84,6 +84,13 @@ const LoginForm: React.FC = () => {
               Iniciar Sesión
             </Button>
           </form>
+          <div className="text-center mt-4">
+            <Link href="/requestPasswordReset">
+              <Button color="secondary" variant="flat">
+                ¿Olvidaste tu contraseña?
+              </Button>
+            </Link>
+          </div>
         </CardBody>
       </Card>
     </motion.div>

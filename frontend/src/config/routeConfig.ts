@@ -1,7 +1,9 @@
 export const routeConfig = {
   "/": "Inicio",
-  "/login": "Iniciar Sesión", // Ruta para el login
-  "/register": "Registrar Cuenta", // Añadir esta ruta para el registro de usuarios
+  "/login": "Iniciar Sesión",
+  "/register": "Registrar Cuenta",
+  "/requestPasswordReset": "Solicitar Restablecimiento de Contraseña",
+  "/passwordReset/[uidb64]/[token]": "Restablecer Contraseña",
   "/openingInformation": "Información de Mercado",
   "/financialManagement": "Gestión Financiera",
   "/financialManagement/financialStatements": "Estados Financieros",

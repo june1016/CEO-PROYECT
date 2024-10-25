@@ -1,7 +1,6 @@
-// src/app/(auth)/login/page.tsx
 "use client";
 import React from "react";
-import LoginForm from "@/components/auth/LoginForm";
+import LoginForm from "@/components/auth/loginForm";
 import Link from "next/link";
 import { Button } from "@nextui-org/react";
 

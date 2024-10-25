@@ -1,32 +1,35 @@
-# # Django imports
 # from django.contrib.auth.tokens import PasswordResetTokenGenerator
 # from django.core.mail import send_mail
-# from django.utils.encoding import smart_bytes, smart_str, DjangoUnicodeDecodeError
+# from django.utils.encoding import smart_bytes, smart_str
 # from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-
-# # Rest Framework imports
 # from rest_framework import generics, permissions, status, serializers
 # from rest_framework.permissions import AllowAny, IsAuthenticated
 # from rest_framework.response import Response
 # from rest_framework.views import APIView
 # from rest_framework_simplejwt.views import TokenObtainPairView
 # from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-
-# # Local imports
-# from .models import User, FinancialData, RawMaterialInventory
+# from rest_framework.permissions import IsAuthenticated
+# from rest_framework.exceptions import PermissionDenied
+# from django.shortcuts import get_object_or_404
+# from .models import User, Group, FinancialData, RawMaterialInventory
 # from .serializers import (
 #     RegisterSerializer, 
 #     UserSerializer, 
+#     GroupSerializer,
 #     FinancialDataSerializer, 
 #     RawMaterialInventorySerializer,
 #     SetNewPasswordSerializer,
 # )
-
 # # Authentication Views
 # class RegisterView(generics.CreateAPIView):
 #     queryset = User.objects.all()
-#     permission_classes = [AllowAny]
+#     permission_classes = (permissions.AllowAny,)
 #     serializer_class = RegisterSerializer
+
+# class UserListView(generics.ListAPIView):
+#     queryset = User.objects.all()
+#     serializer_class = UserSerializer
+#     permission_classes = [permissions.IsAdminUser]
 
 # class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 #     def validate(self, attrs):
@@ -40,18 +43,14 @@
 # class CustomTokenObtainPairView(TokenObtainPairView):
 #     serializer_class = CustomTokenObtainPairSerializer
 
-# # User Details View
 # class UserDetailView(generics.RetrieveAPIView):
 #     serializer_class = UserSerializer
 #     permission_classes = [IsAuthenticated]
-
 #     def get_object(self):
 #         return self.request.user
 
-# # Password Reset Views
 # class RequestPasswordResetEmail(APIView):
 #     permission_classes = [AllowAny]
-
 #     def post(self, request):
 #         email = request.data.get('email', '')
 #         user = User.objects.filter(email=email).first()
@@ -69,7 +68,6 @@
 
 # class PasswordTokenCheckAPI(APIView):
 #     permission_classes = [AllowAny]
-
 #     def get(self, request, uidb64, token):
 #         try:
 #             user_id = smart_str(urlsafe_base64_decode(uidb64))
@@ -77,12 +75,11 @@
 #             if not PasswordResetTokenGenerator().check_token(user, token):
 #                 return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
 #             return Response({'success': True, 'message': 'Valid credentials'}, status=status.HTTP_200_OK)
-#         except (DjangoUnicodeDecodeError, User.DoesNotExist):
+#         except (ValueError, User.DoesNotExist):
 #             return Response({'error': 'Invalid token'}, status=status.HTTP_401_UNAUTHORIZED)
 
 # class SetNewPasswordAPIView(APIView):
 #     permission_classes = [AllowAny]
-
 #     def patch(self, request):
 #         serializer = SetNewPasswordSerializer(data=request.data)
 #         if serializer.is_valid():
@@ -96,29 +93,58 @@
 #                 return Response({'error': 'User not found'}, status=status.HTTP_400_BAD_REQUEST)
 #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# # Financial Data Views
-# class FinancialDataListView(generics.ListAPIView):
+# # Vista para listar los grupos
+# class GroupListView(generics.ListAPIView):
+#     serializer_class = GroupSerializer
+#     permission_classes = [permissions.IsAuthenticated]
+
+#     def get_queryset(self):
+#         user = self.request.user
+#         if user.role == 'tutor':
+#             return Group.objects.filter(tutor=user)
+#         elif user.role == 'student':
+#             return Group.objects.filter(id=user.group.id) if user.group else Group.objects.none()
+#         return Group.objects.none()
+
+# # Vista para listar los datos financieros
+# class FinancialDataListView(generics.ListCreateAPIView):
 #     serializer_class = FinancialDataSerializer
 #     permission_classes = [IsAuthenticated]
 
 #     def get_queryset(self):
 #         user = self.request.user
 #         if user.role == 'tutor':
-#             return FinancialData.objects.filter(tutor=user)
+#             return FinancialData.objects.filter(group__tutor=user)
 #         elif user.role == 'student':
-#             if user.tutor:
-#                 return FinancialData.objects.filter(tutor=user.tutor)
-#             else:
-#                 raise serializers.ValidationError("El estudiante no tiene un tutor asignado.")
+#             return FinancialData.objects.filter(group__students=user)
 #         return FinancialData.objects.none()
 
-# class RawMaterialInventoryListView(generics.ListAPIView):
+#     def perform_create(self, serializer):
+#         group = get_object_or_404(Group, id=self.request.data.get('group'))
+#         if self.request.user.role == 'tutor' and group.tutor == self.request.user:
+#             serializer.save(group=group)
+#         else:
+#             raise PermissionDenied("No tienes permiso para crear datos financieros para este grupo.")
+
+# # Vista para listar el inventario de materia prima
+# class RawMaterialInventoryListView(generics.ListCreateAPIView):
 #     serializer_class = RawMaterialInventorySerializer
 #     permission_classes = [IsAuthenticated]
 
 #     def get_queryset(self):
 #         financial_data_id = self.request.query_params.get('financial_data_id')
+#         user = self.request.user
 #         if financial_data_id:
-#             return RawMaterialInventory.objects.filter(financial_data_id=financial_data_id)
-
+#             financial_data = get_object_or_404(FinancialData, id=financial_data_id)
+#             if user.role == 'tutor' and financial_data.group.tutor == user:
+#                 return RawMaterialInventory.objects.filter(financial_data_id=financial_data_id)
+#             elif user.role == 'student' and user in financial_data.group.students.all():
+#                 return RawMaterialInventory.objects.filter(financial_data_id=financial_data_id)
 #         return RawMaterialInventory.objects.none()
+
+#     def perform_create(self, serializer):
+#         financial_data = get_object_or_404(FinancialData, id=self.request.data.get('financial_data'))
+#         if self.request.user.role == 'tutor' and financial_data.group.tutor == self.request.user:
+#             serializer.save()
+#         else:
+#             raise PermissionDenied("No tienes permiso para crear inventario de materia prima para estos datos financieros.")

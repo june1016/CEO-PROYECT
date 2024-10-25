@@ -10,7 +10,7 @@ import React, { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { deleteAuthCookie } from "@/utils/authUtils";
 import { DarkModeSwitch } from "./darkmodeswitch";
-import { useUser } from "@/hooks/useUser"; // Hook para obtener el usuario
+import { useUser } from "@/hooks/navbar/useUser"; // Hook para obtener el usuario
 
 export const UserDropdown = () => {
   const router = useRouter();

@@ -1,7 +1,6 @@
-// src/app/(auth)/register/page.tsx
 "use client";
 import React from "react";
-import RegisterForm from "@/components/auth/RegisterForm";
+import RegisterForm from "@/components/auth/registerForm";
 import Link from "next/link";
 import { Button } from "@nextui-org/react";
 

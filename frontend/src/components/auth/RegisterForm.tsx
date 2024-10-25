@@ -1,11 +1,10 @@
-// src/components/auth/RegisterForm.tsx
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Input, Button, Card, CardBody, CardHeader } from "@nextui-org/react";
 import { useRouter } from "next/navigation";
-import api from "@/utils/axiosInstance";
+import api from "@/services/axiosInstance";
 import toast from "react-hot-toast";
 import { motion } from "framer-motion";
 
@@ -18,6 +17,7 @@ const registerSchema = z
       .string()
       .min(6, "La contraseña debe tener al menos 6 caracteres"),
     confirmPassword: z.string(),
+    registrationCode: z.string().min(1, "El código de registro es obligatorio"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Las contraseñas no coinciden",
@@ -38,17 +38,26 @@ const RegisterForm: React.FC = () => {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await api.post("auth/register/", {
+      const response = await api.post("auth/register/", {
         email: data.email,
         password: data.password,
-        password2: data.confirmPassword,
+        password2: data.confirmPassword, // Asegúrate de que este campo se llame 'password2'
         first_name: data.firstName,
         last_name: data.lastName,
+        registration_code: data.registrationCode,
       });
+      console.log("Respuesta del servidor:", response.data);
       toast.success("Registro exitoso");
       router.push("/login");
     } catch (error: any) {
-      toast.error(error.response?.data?.detail || "Error al registrarse");
+      console.error("Error completo:", error);
+      const errorMsg =
+        error.response?.data?.registration_code?.[0] ||
+        error.response?.data?.email?.[0] ||
+        error.response?.data?.password?.[0] ||
+        error.response?.data?.detail ||
+        "Error al registrarse";
+      toast.error(errorMsg);
     }
   };
 
@@ -95,6 +104,17 @@ const RegisterForm: React.FC = () => {
                   {...field}
                   label="Apellido"
                   errorMessage={errors.lastName?.message}
+                />
+              )}
+            />
+            <Controller
+              name="registrationCode"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Código de Registro"
+                  errorMessage={errors.registrationCode?.message}
                 />
               )}
             />

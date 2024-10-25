@@ -1,6 +1,7 @@
+// src/app/(app)/openingInformation/page.tsx
 "use client";
 import React from "react";
-import OpeningInformationTabs from "@/components/openingInformation/OpeningInformationTabs";
+import OpeningInformationTabs from "@/components/openingInformation/openingInformationTabs";
 import { motion } from "framer-motion";
 
 const OpeningInformationPage: React.FC = () => {

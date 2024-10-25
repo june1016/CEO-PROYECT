@@ -1,5 +1,5 @@
 import React from "react";
-import { useSidebarContext } from "../layout/layoutContext";
+import { useSidebarContext } from "@/app/(app)/layout";
 import { StyledBurgerButton } from "./navbarStyles";
 
 export const BurguerButton = () => {
@@ -9,7 +9,7 @@ export const BurguerButton = () => {
     <div
       className={StyledBurgerButton()}
       // open={collapsed}
-      onClick={setCollapsed}
+      onClick={() => setCollapsed(!collapsed)} // Cambiado para manejar el evento correctamente
     >
       <div />
       <div />

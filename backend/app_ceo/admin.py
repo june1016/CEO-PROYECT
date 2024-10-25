@@ -1,10 +1,22 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
-from .models import User, Group, FinancialData, RawMaterialInventory
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from .models import User, Group, Institution, Role, RegistrationCode
+
+# Fase 1: Autenticación y Gestión de Usuarios
+
+# Registro del modelo Role
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+
+# Registro del modelo Institution
+@admin.register(Institution)
+class InstitutionAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'address', 'contact_info')
 
 # Administración personalizada para el modelo User
 @admin.register(User)
-class CustomUserAdmin(UserAdmin):
+class UserAdmin(BaseUserAdmin):
     model = User
     list_display = ('email', 'first_name', 'last_name', 'institution', 'role', 'group', 'is_active')
     list_filter = ('role', 'is_active', 'group')
@@ -27,25 +39,18 @@ class CustomUserAdmin(UserAdmin):
 # Administración personalizada para el modelo Group
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ('name', 'tutor', 'student_count')
+    list_display = ('name', 'tutor', 'institution', 'student_count')
     search_fields = ('name', 'tutor__email')
+    list_filter = ('institution',)
 
     def student_count(self, obj):
         return obj.students.count()
     student_count.short_description = 'Número de estudiantes'
 
-# Administración personalizada para el modelo FinancialData
-@admin.register(FinancialData)
-class FinancialDataAdmin(admin.ModelAdmin):
-    list_display = ('company_name', 'group', 'cash_on_hand', 'cash_in_bank', 'created_at')
-    search_fields = ('company_name', 'group__name')
-    list_filter = ('created_at', 'updated_at')
-    ordering = ['-created_at']
+# Registro del modelo RegistrationCode
+@admin.register(RegistrationCode)
+class RegistrationCodeAdmin(admin.ModelAdmin):
+    list_display = ('code', 'role', 'group', 'is_used', 'expiry_date')
+    list_filter = ('role', 'is_used', 'expiry_date')
+    search_fields = ('code',)
 
-# Administración personalizada para el modelo RawMaterialInventory
-@admin.register(RawMaterialInventory)
-class RawMaterialInventoryAdmin(admin.ModelAdmin):
-    list_display = ('material_code', 'description', 'quantity', 'total_cost', 'financial_data')
-    search_fields = ('material_code', 'description')
-    list_filter = ('created_at', 'updated_at')
-    ordering = ['-created_at']
